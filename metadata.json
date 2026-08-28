@@ -1,0 +1,10 @@
+{
+  "name": "Remix ตรวจสอบความพร้อมรถโดยสาร เขตการเดินรถที่ 6",
+  "description": "ระบบตรวจสอบความพร้อมสภาพรถโดยสารประจำทาง เขตการเดินรถที่ 6 ",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
