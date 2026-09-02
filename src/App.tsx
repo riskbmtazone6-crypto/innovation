@@ -5,6 +5,7 @@ import { Step1Info } from './components/Step1Info';
 import { Step2Inspection } from './components/Step2Inspection';
 import { Step3Dashboard } from './components/Step3Dashboard';
 import { VideoTutorialModal } from './components/VideoTutorialModal';
+import { SystemManualModal } from './components/SystemManualModal';
 import { InspectorUser, InspectionRecord } from './types';
 import { DEFAULT_INSPECTOR } from './data/initialData';
 import {
@@ -35,6 +36,9 @@ export default function App() {
 
   // Video Tutorial Modal State
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
+
+  // System User Manual Modal State
+  const [showManualModal, setShowManualModal] = useState(false);
 
   // Firestore Inspection Records
   const [records, setRecords] = useState<InspectionRecord[]>([]);
@@ -141,6 +145,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         isFirebaseConnected={isFirebaseConnected}
         onOpenTutorial={() => setShowVideoTutorial(true)}
+        onOpenManual={() => setShowManualModal(true)}
       />
 
       {/* Main Content Area */}
@@ -187,6 +192,12 @@ export default function App() {
           setActiveTab(step);
           setShowVideoTutorial(false);
         }}
+      />
+
+      {/* System User Manual (Every Screen & Menu Visual Guide) Modal */}
+      <SystemManualModal
+        isOpen={showManualModal}
+        onClose={() => setShowManualModal(false)}
       />
 
       {/* Bottom Navigation for Mobile Devices */}

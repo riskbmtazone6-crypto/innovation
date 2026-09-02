@@ -5,13 +5,15 @@ interface HeaderProps {
   setActiveTab: (tab: 'info' | 'inspect' | 'dashboard') => void;
   isFirebaseConnected: boolean;
   onOpenTutorial: () => void;
+  onOpenManual: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   isFirebaseConnected,
-  onOpenTutorial
+  onOpenTutorial,
+  onOpenManual
 }) => {
   return (
     <header className="bg-white border-b border-[#e5e7eb] sticky top-0 w-full z-50 shadow-xs">
@@ -37,17 +39,30 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Center/Right: Desktop Nav Cluster & Video Tutorial Button */}
-        <div className="flex items-center gap-2.5">
+        {/* Center/Right: Desktop Nav Cluster & Tutorial / Manual Buttons */}
+        <div className="flex items-center gap-2">
+          {/* User Manual Button */}
+          <button
+            type="button"
+            onClick={onOpenManual}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[12.5px] font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+            title="เปิดคู่มือการใช้งานระบบพร้อมภาพหน้าจอทุกเมนู"
+          >
+            <span className="material-symbols-outlined text-[17px] text-[#005c55]">menu_book</span>
+            <span className="hidden sm:inline">คู่มือทุกหน้าจอ</span>
+            <span className="sm:hidden">คู่มือ</span>
+          </button>
+
+          {/* Video Tutorial Button */}
           <button
             type="button"
             onClick={onOpenTutorial}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-[13px] font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-[12.5px] font-bold transition-all shadow-xs cursor-pointer active:scale-95"
             title="เปิดวิดีโอสอนการใช้งาน 3 ขั้นตอน"
           >
-            <span className="material-symbols-outlined text-[18px] text-red-600 animate-pulse">play_circle</span>
+            <span className="material-symbols-outlined text-[17px] text-red-600 animate-pulse">play_circle</span>
             <span className="hidden sm:inline">วิดีโอสอนใช้งาน</span>
-            <span className="sm:hidden">คู่มือวิดีโอ</span>
+            <span className="sm:hidden">วิดีโอ</span>
           </button>
 
           <nav className="hidden md:flex items-center gap-2">

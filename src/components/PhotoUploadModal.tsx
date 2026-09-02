@@ -82,34 +82,62 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    let isActive = true;
+
     if (isOpen) {
       setSelectedUrl(currentImageUrl || '');
       setIsProcessing(false);
 
       if (activeMode === 'camera') {
-        startCamera();
+        startCamera(isActive);
+      } else {
+        stopCamera();
       }
     } else {
       stopCamera();
     }
 
     return () => {
+      isActive = false;
       stopCamera();
     };
   }, [isOpen, activeMode]);
 
   if (!isOpen) return null;
 
-  const startCamera = async () => {
+  const startCamera = async (isActive = true) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }
       });
+
+      if (!isActive || !stream) {
+        stream?.getTracks().forEach((track) => track.stop());
+        return;
+      }
+
       setCameraStream(stream);
       setIsCameraActive(true);
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
+        videoRef.current.setAttribute('playsinline', 'true');
+        videoRef.current.muted = true;
+        
+        try {
+          const playPromise = videoRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((err) => {
+              if (err && err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
+                console.warn('Camera video play caught safely:', err);
+              }
+            });
+          }
+        } catch (err: any) {
+          if (err && err.name !== 'AbortError') {
+            console.warn('Camera play synchronous exception:', err);
+          }
+        }
       }
     } catch (err) {
       console.warn('Camera failed or not permitted:', err);
@@ -149,6 +177,14 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({
   };
 
   const stopCamera = () => {
+    if (videoRef.current) {
+      try {
+        videoRef.current.pause();
+      } catch {
+        // ignore
+      }
+      videoRef.current.srcObject = null;
+    }
     if (cameraStream) {
       cameraStream.getTracks().forEach((track) => track.stop());
       setCameraStream(null);

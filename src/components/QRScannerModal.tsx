@@ -42,20 +42,23 @@ export const QRScannerModal: React.FC<QRScannerModalProps> = ({
     return matchesRoute && matchesQuery;
   });
 
-  // Start / stop camera stream
+  // Start / stop camera stream with mount tracking
   useEffect(() => {
+    let isActive = true;
+
     if (isOpen && activeTab === 'camera') {
-      startCamera();
+      startCamera(isActive);
     } else {
       stopCamera();
     }
 
     return () => {
+      isActive = false;
       stopCamera();
     };
   }, [isOpen, activeTab]);
 
-  const startCamera = async () => {
+  const startCamera = async (isActive = true) => {
     setCameraError(null);
     setIsScanning(true);
     setScannedResult(null);
@@ -68,13 +71,42 @@ export const QRScannerModal: React.FC<QRScannerModalProps> = ({
           height: { ideal: 720 }
         }
       });
+
+      if (!isActive || !stream) {
+        stream?.getTracks().forEach((track) => track.stop());
+        return;
+      }
+
       streamRef.current = stream;
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.setAttribute('playsinline', 'true');
-        videoRef.current.play();
-        startScanLoop();
+        videoRef.current.muted = true;
+        
+        try {
+          const playPromise = videoRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                if (isActive) {
+                  startScanLoop();
+                }
+              })
+              .catch((err) => {
+                // Ignore AbortError / interrupted play requests from stream unmounting
+                if (err && err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
+                  console.warn('Camera play exception caught safely:', err);
+                }
+              });
+          } else {
+            startScanLoop();
+          }
+        } catch (err: any) {
+          if (err && err.name !== 'AbortError') {
+            console.warn('Camera synchronous play error:', err);
+          }
+        }
       }
     } catch (err: any) {
       console.warn('Camera access error:', err);
@@ -87,6 +119,14 @@ export const QRScannerModal: React.FC<QRScannerModalProps> = ({
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = null;
+    }
+    if (videoRef.current) {
+      try {
+        videoRef.current.pause();
+      } catch {
+        // ignore
+      }
+      videoRef.current.srcObject = null;
     }
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
