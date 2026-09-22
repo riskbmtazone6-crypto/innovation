@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { InspectorUser } from '../types';
 import { OPERATION_GROUPS } from '../data/initialData';
 import { QRScannerModal } from './QRScannerModal';
 import { ParsedBusQR } from '../utils/qrScanner';
 import { findVehicleByBusNumber } from '../data/fleetData';
+import { findEmployeeById, searchEmployees, BMTAEmployee, POPULAR_ZONE6_EMPLOYEES } from '../data/employeeDatabase';
 
 interface Step1InfoProps {
   currentInspector: InspectorUser;
   onStartInspection: (info: {
     inspectorName: string;
+    inspectorId?: string;
     operationGroup: string;
     operationGroupName: string;
     busRoute: string;
     busNumber: string;
   }) => void;
   savedInspectorName?: string;
+  savedInspectorId?: string;
   savedRoute?: string;
   savedBusNumber?: string;
   savedOpGroup?: string;
@@ -25,12 +28,18 @@ export const Step1Info: React.FC<Step1InfoProps> = ({
   currentInspector,
   onStartInspection,
   savedInspectorName = '',
+  savedInspectorId = '',
   savedRoute = '',
   savedBusNumber = '',
   savedOpGroup = '6-3',
   onOpenTutorial
 }) => {
-  const [inspectorName, setInspectorName] = useState(savedInspectorName);
+  const [inspectorId, setInspectorId] = useState(savedInspectorId || currentInspector.id || '');
+  const [inspectorName, setInspectorName] = useState(savedInspectorName || currentInspector.name || '');
+  const [idMatchStatus, setIdMatchStatus] = useState<'found' | 'not_found' | 'idle'>('idle');
+  const [showIdDropdown, setShowIdDropdown] = useState(false);
+  const [idSuggestions, setIdSuggestions] = useState<BMTAEmployee[]>([]);
+
   const [operationGroup, setOperationGroup] = useState(savedOpGroup);
   const [busRoute, setBusRoute] = useState(savedRoute);
   const [busNumber, setBusNumber] = useState(savedBusNumber);
@@ -39,14 +48,75 @@ export const Step1Info: React.FC<Step1InfoProps> = ({
   const [scannedBadge, setScannedBadge] = useState<boolean>(!!savedRoute && !!savedBusNumber);
   const [scanSourceNote, setScanSourceNote] = useState<string | null>(null);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   // Sync state when props update (e.g., when resetting session)
   useEffect(() => {
-    setInspectorName(savedInspectorName);
+    setInspectorId(savedInspectorId || currentInspector.id || '');
+    setInspectorName(savedInspectorName || currentInspector.name || '');
     setBusRoute(savedRoute);
     setBusNumber(savedBusNumber);
     setOperationGroup(savedOpGroup);
     setScannedBadge(!!savedRoute && !!savedBusNumber);
-  }, [savedInspectorName, savedRoute, savedBusNumber, savedOpGroup]);
+  }, [savedInspectorName, savedInspectorId, savedRoute, savedBusNumber, savedOpGroup, currentInspector]);
+
+  // Click outside to close employee dropdown
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowIdDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Check ID on initial load or change
+  useEffect(() => {
+    if (!inspectorId.trim()) {
+      setIdMatchStatus('idle');
+      return;
+    }
+    const emp = findEmployeeById(inspectorId.trim());
+    if (emp) {
+      setIdMatchStatus('found');
+      if (!inspectorName || inspectorName === currentInspector.name) {
+        setInspectorName(emp.name);
+      }
+    } else {
+      setIdMatchStatus('not_found');
+    }
+  }, [inspectorId]);
+
+  // Handle typing employee ID
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInspectorId(val);
+
+    if (val.trim()) {
+      const results = searchEmployees(val.trim(), 6);
+      setIdSuggestions(results);
+      setShowIdDropdown(true);
+
+      const exact = findEmployeeById(val.trim());
+      if (exact) {
+        setInspectorName(exact.name);
+        setIdMatchStatus('found');
+      } else {
+        setIdMatchStatus('not_found');
+      }
+    } else {
+      setIdSuggestions(POPULAR_ZONE6_EMPLOYEES.slice(0, 5));
+      setIdMatchStatus('idle');
+    }
+  };
+
+  const handleSelectEmployee = (emp: BMTAEmployee) => {
+    setInspectorId(emp.id);
+    setInspectorName(emp.name);
+    setIdMatchStatus('found');
+    setShowIdDropdown(false);
+  };
 
   // Thai Date formatting
   useEffect(() => {
@@ -70,29 +140,34 @@ export const Step1Info: React.FC<Step1InfoProps> = ({
   }, []);
 
   const handleQRScanSuccess = (data: ParsedBusQR) => {
-    if (data.route) setBusRoute(data.route);
-    if (data.busNumber) setBusNumber(data.busNumber);
+    // สายเดินรถ ดึงข้อมูลจากเซล B, เลขข้างรถ ดึงข้อมูลจากเซล D
+    if (data.route || data.cellB) setBusRoute(data.route || data.cellB || '');
+    if (data.busNumber || data.cellD) setBusNumber(data.busNumber || data.cellD || '');
     setScannedBadge(true);
-    setScanSourceNote(data.sourceFormat || 'ดึงจาก เซล B และ เซล D สำเร็จ');
+    setScanSourceNote(
+      data.sourceFormat ||
+      `ดึงข้อมูลสำเร็จ: สายเดินรถจากเซล B (${data.route || data.cellB}) | เลขข้างรถจากเซล D (${data.busNumber || data.cellD})`
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inspectorName.trim()) {
-      alert('กรุณาระบุชื่อผู้ตรวจ');
+      alert('กรุณาระบุเลขประจำตัวหรือชื่อผู้ตรวจ');
       return;
     }
     if (!busRoute.trim()) {
-      alert('กรุณาสแกนหรือระบุสายเดินรถ');
+      alert('กรุณาสแกนหรือระบุสายเดินรถ (เซล B)');
       return;
     }
     if (!busNumber.trim()) {
-      alert('กรุณาสแกนหรือระบุเลขข้างรถ');
+      alert('กรุณาสแกนหรือระบุเลขข้างรถ (เซล D)');
       return;
     }
 
     const selectedGroup = OPERATION_GROUPS.find((g) => g.id === operationGroup);
     onStartInspection({
+      inspectorId: inspectorId.trim(),
       inspectorName: inspectorName.trim(),
       operationGroup,
       operationGroupName: selectedGroup ? selectedGroup.name : 'กลุ่มงานปฏิบัติการเดินรถที่ 3 (กปด.36)',
@@ -175,24 +250,151 @@ export const Step1Info: React.FC<Step1InfoProps> = ({
             </div>
           </div>
 
-          {/* Full Name */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[13px] font-bold text-[#121b2e]" htmlFor="inspector-name">
-              1. ชื่อ–นามสกุล (ผู้ตรวจ) <span className="text-red-500">*</span>
-            </label>
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-3.5 text-[#6b7280] text-[20px]">
-                badge
-              </span>
-              <input
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#bdc9c6] bg-white text-[#121b2e] text-[15px] focus:outline-none focus:border-[#005c55] focus:ring-2 focus:ring-[#005c55]/20 transition-colors"
-                id="inspector-name"
-                type="text"
-                value={inspectorName}
-                onChange={(e) => setInspectorName(e.target.value)}
-                placeholder="โปรดระบุ"
-                required
-              />
+          {/* 1. Employee ID & Name (ระบุเลขประจำตัว ID แสดงชื่อ-นามสกุล NAME) */}
+          <div className="bg-[#f8fafc] border border-[#e2e8f0] rounded-2xl p-4.5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 rounded-lg bg-[#005c55] text-white flex items-center justify-center text-[12px] font-bold">
+                  1
+                </span>
+                <span className="text-[14px] font-bold text-[#121b2e]">
+                  ข้อมูลผู้ตรวจ (ระบุ ID แสดง NAME อัตโนมัติ)
+                </span>
+              </div>
+              {idMatchStatus === 'found' && (
+                <span className="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                  <span>พบข้อมูลพนักงาน</span>
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Employee ID Input */}
+              <div className="flex flex-col gap-1.5 relative" ref={dropdownRef}>
+                <div className="flex items-center justify-between">
+                  <label className="text-[13px] font-bold text-[#121b2e]" htmlFor="inspector-id">
+                    เลขประจำตัว (ID) <span className="text-red-500">*</span>
+                  </label>
+                  <span className="text-[11px] text-[#64748b]">พิมพ์ 6 หลัก</span>
+                </div>
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-3.5 text-[#6b7280] text-[20px]">
+                    badge
+                  </span>
+                  <input
+                    className="w-full pl-11 pr-10 py-3 rounded-xl border border-[#bdc9c6] bg-white text-[#121b2e] text-[15px] font-mono tracking-wider focus:outline-none focus:border-[#005c55] focus:ring-2 focus:ring-[#005c55]/20 transition-colors"
+                    id="inspector-id"
+                    type="text"
+                    value={inspectorId}
+                    onChange={handleIdChange}
+                    onFocus={() => {
+                      if (!inspectorId) {
+                        setIdSuggestions(POPULAR_ZONE6_EMPLOYEES.slice(0, 5));
+                      }
+                      setShowIdDropdown(true);
+                    }}
+                    placeholder="เช่น 137044, 637517"
+                    maxLength={10}
+                    required
+                  />
+                  {idMatchStatus === 'found' && (
+                    <span className="absolute right-3 text-[#15803d] material-symbols-outlined text-[20px]">
+                      check_circle
+                    </span>
+                  )}
+                  {idMatchStatus === 'not_found' && inspectorId.length >= 4 && (
+                    <span className="absolute right-3 text-amber-500 material-symbols-outlined text-[20px]" title="ไม่พบในฐานข้อมูล สามารถพิมพ์ชื่อเองได้">
+                      help
+                    </span>
+                  )}
+                </div>
+
+                {/* ID Autocomplete Dropdown */}
+                {showIdDropdown && idSuggestions.length > 0 && (
+                  <div className="absolute left-0 right-0 top-full mt-1.5 z-30 bg-white rounded-xl shadow-xl border border-[#e2e8f0] max-h-56 overflow-y-auto divide-y divide-slate-100">
+                    <div className="px-3 py-1.5 bg-slate-50 text-[11px] font-bold text-slate-500 sticky top-0">
+                      รายชื่อพนักงาน ขสมก. เขต 6
+                    </div>
+                    {idSuggestions.map((emp) => (
+                      <button
+                        key={emp.id}
+                        type="button"
+                        onClick={() => handleSelectEmployee(emp)}
+                        className="w-full px-3.5 py-2.5 text-left hover:bg-emerald-50 transition-colors flex items-center justify-between text-[13px] cursor-pointer"
+                      >
+                        <div>
+                          <strong className="text-[#121b2e] font-semibold">{emp.name}</strong>
+                          <p className="text-[11px] text-[#64748b]">ตำแหน่ง: {emp.position || 'พนักงานเขต 6'}</p>
+                        </div>
+                        <span className="text-[12px] font-mono font-bold text-[#005c55] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          ID: {emp.id}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Inspector Name (Auto-populated from ID) */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[13px] font-bold text-[#121b2e]" htmlFor="inspector-name">
+                    ชื่อ–นามสกุล (NAME) <span className="text-red-500">*</span>
+                  </label>
+                  {idMatchStatus === 'found' ? (
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded">
+                      ดึงจาก ID อัตโนมัติ
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-[#64748b]">แก้ไขได้</span>
+                  )}
+                </div>
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-3.5 text-[#6b7280] text-[20px]">
+                    person
+                  </span>
+                  <input
+                    className={`w-full pl-11 pr-4 py-3 rounded-xl border border-[#bdc9c6] text-[15px] focus:outline-none focus:border-[#005c55] focus:ring-2 focus:ring-[#005c55]/20 transition-colors ${
+                      idMatchStatus === 'found' ? 'bg-emerald-50/40 text-[#121b2e] font-medium' : 'bg-white text-[#121b2e]'
+                    }`}
+                    id="inspector-name"
+                    type="text"
+                    value={inspectorName}
+                    onChange={(e) => setInspectorName(e.target.value)}
+                    placeholder="ชื่อ–นามสกุล ผู้ตรวจ"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Quick ID chips */}
+            <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
+              <span className="text-[11px] text-[#64748b]">ตัวอย่างรหัส:</span>
+              {[
+                { id: '137044', name: 'นายสถาพร มีทรัพย์' },
+                { id: '637517', name: 'นายสมพร ปิ่นทอง' },
+                { id: '662020', name: 'น.ส.กมลทิพย์ แสงใส' },
+                { id: '123456', name: 'นายสมชาย ใจดี' }
+              ].map((chip) => (
+                <button
+                  key={chip.id}
+                  type="button"
+                  onClick={() => {
+                    setInspectorId(chip.id);
+                    setInspectorName(chip.name);
+                    setIdMatchStatus('found');
+                  }}
+                  className={`text-[11px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                    inspectorId === chip.id
+                      ? 'bg-[#005c55] text-white border-[#005c55]'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-[#005c55] hover:text-[#005c55]'
+                  }`}
+                >
+                  {chip.id} ({chip.name.split(' ')[0]})
+                </button>
+              ))}
             </div>
           </div>
 

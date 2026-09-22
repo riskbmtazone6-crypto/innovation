@@ -83,68 +83,42 @@ export function parseBusQRText(text: string): ParsedBusQR {
   }
 
   // =========================================================================
-  // 2. Spreadsheet Row: Tab-separated (TSV / Excel / Google Sheets copy-paste)
-  //    No., Bus line (Cell B), model (Cell C), busnumber (Cell D), License plate (Cell E)
+  // 2. Spreadsheet Row: Tab, Comma, Semicolon, or Pipe separated
+  //    Cell A: No., Cell B: Bus line, Cell C: Model, Cell D: Bus number, Cell E: License plate
   // =========================================================================
-  if (clean.includes('\t')) {
-    const tsvParts = clean.split('\t').map(cleanCellValue);
-    if (tsvParts.length >= 4) {
-      // Column index 1 = Cell B (Bus line), Column index 3 = Cell D (busnumber)
-      const route = sanitizeRoute(tsvParts[1]);
-      const busNumber = cleanCellValue(tsvParts[3]);
+  const delimiterMatch = clean.includes('\t') ? '\t'
+    : clean.includes(';') ? ';'
+    : clean.includes('|') ? '|'
+    : clean.includes(',') ? ',' : null;
+
+  if (delimiterMatch) {
+    const rowParts = clean.split(delimiterMatch).map(cleanCellValue);
+    if (rowParts.length >= 4) {
+      // Cell B = index 1 (สายเดินรถ), Cell D = index 3 (เลขข้างรถ)
+      const route = sanitizeRoute(rowParts[1]);
+      const busNumber = cleanCellValue(rowParts[3]);
       const fleetVehicle = findVehicleByBusNumber(busNumber);
 
       return {
         route: route || fleetVehicle?.route || '',
-        busNumber,
-        cellB: route,
-        cellD: busNumber,
-        licensePlate: tsvParts[4] || fleetVehicle?.licensePlate,
-        model: tsvParts[2] || fleetVehicle?.model,
+        busNumber: busNumber || fleetVehicle?.busNumber || '',
+        cellB: route || fleetVehicle?.route || '',
+        cellD: busNumber || fleetVehicle?.busNumber || '',
+        licensePlate: rowParts[4] || fleetVehicle?.licensePlate,
+        model: rowParts[2] || fleetVehicle?.model,
         rawText: rawClean,
-        sourceFormat: 'Excel/Sheets TSV (Cell B: สายเดินรถ, Cell D: เลขข้างรถ)'
+        sourceFormat: `สเปรดชีต (สายเดินรถจากเซล B: ${route || '-'}, เลขข้างรถจากเซล D: ${busNumber || '-'})`
       };
-    } else if (tsvParts.length >= 2) {
-      const route = sanitizeRoute(tsvParts[0]);
-      const busNumber = cleanCellValue(tsvParts[1]);
+    } else if (rowParts.length >= 2) {
+      const route = sanitizeRoute(rowParts[0]);
+      const busNumber = cleanCellValue(rowParts[1]);
       return {
         route,
         busNumber,
         cellB: route,
         cellD: busNumber,
         rawText: rawClean,
-        sourceFormat: 'TSV 2-Columns'
-      };
-    }
-  }
-
-  // =========================================================================
-  // 3. Comma-separated (CSV): 1,4-59,ISUZU,50010,11-8991,...
-  //    Cell A = No, Cell B = Bus line (index 1), Cell C = model, Cell D = busnumber (index 3)
-  // =========================================================================
-  if (clean.includes(',')) {
-    const csvParts = clean.split(',').map(cleanCellValue);
-    if (csvParts.length >= 4) {
-      const route = sanitizeRoute(csvParts[1]);
-      const busNumber = cleanCellValue(csvParts[3]);
-      const fleetVehicle = findVehicleByBusNumber(busNumber);
-
-      return {
-        route: route || fleetVehicle?.route || '',
-        busNumber,
-        cellB: route,
-        cellD: busNumber,
-        licensePlate: csvParts[4] || fleetVehicle?.licensePlate,
-        model: csvParts[2] || fleetVehicle?.model,
-        rawText: rawClean,
-        sourceFormat: 'CSV Row (Cell B: สายเดินรถ, Cell D: เลขข้างรถ)'
-      };
-    } else if (csvParts.length >= 2) {
-      return {
-        route: sanitizeRoute(csvParts[0]),
-        busNumber: csvParts.slice(1).join('-'),
-        rawText: rawClean,
-        sourceFormat: 'CSV 2-Columns'
+        sourceFormat: `ดึงข้อมูลสำเร็จ (เซล B: ${route}, เซล D: ${busNumber})`
       };
     }
   }
@@ -220,10 +194,10 @@ export function parseBusQRText(text: string): ParsedBusQR {
   }
 
   // =========================================================================
-  // 6. Explicit Cell key-value syntax: e.g. "B: 4-59, D: 50010" or "เซล B: 4-59 เซล D: 50010"
+  // 6. Explicit Cell key-value syntax: e.g. "B: 4-59, D: 50010" or "เซล B 4-59 เซล D 50010"
   // =========================================================================
-  const cellBMatch = clean.match(/(?:(?:เซล|cell|col|column)\s*b|b)\s*[:=]\s*([^,\s;&\n]+)/i);
-  const cellDMatch = clean.match(/(?:(?:เซล|cell|col|column)\s*d|d)\s*[:=]\s*([^,\s;&\n]+)/i);
+  const cellBMatch = clean.match(/(?:(?:เซล|cell|col|column|ช่อง)\s*b|b)\s*[:=\s]\s*([0-9A-Za-z\-ก-๙\.]+)/i);
+  const cellDMatch = clean.match(/(?:(?:เซล|cell|col|column|ช่อง)\s*d|d)\s*[:=\s]\s*([0-9A-Za-z\-]+)/i);
   if (cellBMatch && cellDMatch) {
     const route = sanitizeRoute(cleanCellValue(cellBMatch[1]));
     const busNumber = cleanCellValue(cellDMatch[1]);
@@ -231,13 +205,13 @@ export function parseBusQRText(text: string): ParsedBusQR {
 
     return {
       route: route || fleetVehicle?.route || '',
-      busNumber,
-      cellB: route,
-      cellD: busNumber,
+      busNumber: busNumber || fleetVehicle?.busNumber || '',
+      cellB: route || fleetVehicle?.route || '',
+      cellD: busNumber || fleetVehicle?.busNumber || '',
       licensePlate: fleetVehicle?.licensePlate,
       model: fleetVehicle?.model,
       rawText: rawClean,
-      sourceFormat: 'Key-Value (Cell B & Cell D)'
+      sourceFormat: `ระบุเซลตรงกัน (สายเดินรถจากเซล B: ${route}, เลขข้างรถจากเซล D: ${busNumber})`
     };
   }
 

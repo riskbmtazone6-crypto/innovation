@@ -7,6 +7,7 @@ import { InspectionSummaryModal } from './InspectionSummaryModal';
 interface Step2InspectionProps {
   currentInspector: InspectorUser;
   inspectorName?: string;
+  inspectorId?: string;
   busRoute: string;
   busNumber: string;
   operationGroupName: string;
@@ -18,6 +19,7 @@ interface Step2InspectionProps {
 export const Step2Inspection: React.FC<Step2InspectionProps> = ({
   currentInspector,
   inspectorName,
+  inspectorId,
   busRoute,
   busNumber,
   operationGroupName,
@@ -708,6 +710,7 @@ export const Step2Inspection: React.FC<Step2InspectionProps> = ({
         busRoute={busRoute}
         busNumber={busNumber}
         inspectorName={inspectorName || currentInspector.name}
+        inspectorId={inspectorId}
         operationGroupName={operationGroupName}
         items={allSubItems}
         sets={inspectionSets}

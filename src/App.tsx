@@ -24,6 +24,7 @@ export default function App() {
 
   // Active Inspection Session
   const [activeInspectionSession, setActiveInspectionSession] = useState({
+    inspectorId: '',
     inspectorName: '',
     operationGroup: '6-3',
     operationGroupName: 'กลุ่มงานปฏิบัติการเดินรถที่ 3 (กปด.36)',
@@ -84,12 +85,20 @@ export default function App() {
   // Step 1 -> Step 2 transition
   const handleStartInspection = (info: {
     inspectorName: string;
+    inspectorId?: string;
     operationGroup: string;
     operationGroupName: string;
     busRoute: string;
     busNumber: string;
   }) => {
-    setActiveInspectionSession(info);
+    setActiveInspectionSession({
+      inspectorId: info.inspectorId || '',
+      inspectorName: info.inspectorName,
+      operationGroup: info.operationGroup,
+      operationGroupName: info.operationGroupName,
+      busRoute: info.busRoute,
+      busNumber: info.busNumber
+    });
     setJustCompletedInspection(false);
     setActiveTab('inspect');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -122,6 +131,7 @@ export default function App() {
   // Reset session and restart from Step 1 (เมื่อเรียบร้อยทั้ง 3 step เริ่มต้นใหม่)
   const handleStartNewInspection = () => {
     setActiveInspectionSession({
+      inspectorId: '',
       inspectorName: '',
       operationGroup: '6-3',
       operationGroupName: 'กลุ่มงานปฏิบัติการเดินรถที่ 3 (กปด.36)',
@@ -155,6 +165,7 @@ export default function App() {
             currentInspector={currentInspector}
             onStartInspection={handleStartInspection}
             savedInspectorName={activeInspectionSession.inspectorName}
+            savedInspectorId={activeInspectionSession.inspectorId}
             savedRoute={activeInspectionSession.busRoute}
             savedBusNumber={activeInspectionSession.busNumber}
             savedOpGroup={activeInspectionSession.operationGroup}
@@ -166,6 +177,7 @@ export default function App() {
           <Step2Inspection
             currentInspector={currentInspector}
             inspectorName={activeInspectionSession.inspectorName}
+            inspectorId={activeInspectionSession.inspectorId}
             busRoute={activeInspectionSession.busRoute}
             busNumber={activeInspectionSession.busNumber}
             operationGroupName={activeInspectionSession.operationGroupName}

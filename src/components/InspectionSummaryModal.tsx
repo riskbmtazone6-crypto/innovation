@@ -8,6 +8,7 @@ interface InspectionSummaryModalProps {
   busRoute: string;
   busNumber: string;
   inspectorName: string;
+  inspectorId?: string;
   operationGroupName: string;
   items: InspectionItem[];
   sets?: InspectionGroupSet[];
@@ -21,6 +22,7 @@ export const InspectionSummaryModal: React.FC<InspectionSummaryModalProps> = ({
   busRoute,
   busNumber,
   inspectorName,
+  inspectorId,
   operationGroupName,
   items,
   sets,
@@ -64,6 +66,7 @@ export const InspectionSummaryModal: React.FC<InspectionSummaryModalProps> = ({
       dateStr: thaiDate,
       timeStr: thaiTime,
       inspectorName,
+      inspectorId: inspectorId || undefined,
       operationGroup: '6-3',
       operationGroupName,
       busRoute,
