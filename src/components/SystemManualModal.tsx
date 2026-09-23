@@ -31,36 +31,38 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
   const manualSections: ManualSection[] = [
     {
       id: 'step1',
-      title: 'ขั้นตอนที่ 1: ข้อมูลผู้ตรวจและข้อมูลรถ (Step 1)',
+      title: 'ขั้นตอนที่ 1: ข้อมูลผู้ตรวจและรถโดยสาร (Step 1)',
       badge: 'Step 1',
       icon: 'badge',
-      subtitle: 'การระบุตัวตนผู้ตรวจ สังกัดกลุ่มงาน และการระบุรถโดยสาร',
+      subtitle: 'การระบุรหัสพนักงาน (ID) ดึงชื่ออัตโนมัติ สังกัด กปด. และสแกน QR Code ประจำรถ',
       description:
-        'เป็นหน้าจอเริ่มต้นที่ผู้ตรวจการต้องระบุชื่อ-นามสกุล สังกัดกลุ่มงานปฏิบัติการเดินรถ (กปด.16, 26, หรือ 36) พร้อมทั้งระบุสายการเดินรถและเลขข้างรถ ซึ่งสามารถเลือกใช้วิธีสแกน QR Code ประจำรถ หรือเลือกจากฐานข้อมูล 326 คันของเขต 6 ได้อย่างสะดวกรวดเร็ว',
+        'หน้าจอเริ่มต้นสำหรับการปฏิบัติงานของผู้ตรวจการ ขสมก. เขต 6 เริ่มจากการกรอกเลขประจำตัวพนักงาน (ID) ระบบจะดึงชื่อ-นามสกุลให้อัตโนมัติ จากนั้นเลือกกลุ่มงานปฏิบัติการเดินรถ (กปด.16, 26, หรือ 36) และสแกน QR Code ประจำรถ เพื่อดึงสายเดินรถ (เซล B) และเลขข้างรถ (เซล D) พร้อมยี่ห้อ ISUZU และทะเบียนรถ (เซล E) เข้าสู่แบบฟอร์มทันที หรือจะค้นหาจากบัญชีรถ 326 คันของเขต 6 ก็ได้',
       screenSummary: [
-        '1. ช่องกรอกชื่อ-นามสกุล ผู้ตรวจการ หรือเชื่อมต่อบัญชีอัตโนมัติ',
-        '2. เมนูเลือกสังกัดกลุ่มงานปฏิบัติการเดินรถ (กปด.16 อู่บรมราชชนนี, กปด.26 อู่ศรีณรงค์, กปด.36 อู่ไร่ขิง)',
-        '3. ปุ่ม "📷 เปิดกล้องสแกน QR" เพื่ออ่านค่าสายและเลขข้างรถอัตโนมัติ',
-        '4. ช่องกรอกสายเดินรถ (เซล B) เช่น 4-59, 515, 4-43, 91ก',
-        '5. ช่องกรอกเลขข้างรถ (เซล D) เช่น 50010, 55001, 56070',
-        '6. บัญชีค้นหาด่วนจากทะเบียนรถ 326 คันของเขตการเดินรถที่ 6',
-        '7. ปุ่ม "ถัดไป: เริ่มต้นตรวจสอบสภาพรถ (ไปขั้นตอนที่ 2) →"'
+        '1. ช่องกรอกเลขประจำตัวผู้ตรวจ (ID) เช่น 60124 ระบบดึงชื่ออัตโนมัติ "นายสมศักดิ์ ขสมก."',
+        '2. ช่องชื่อ-นามสกุลผู้ตรวจสอบ (NAME) สามารถแก้ไขหรือพิมพ์เพิ่มเติมได้',
+        '3. เมนูเลือกสังกัดกลุ่มงาน: กปด.16 (อู่ไร่ขิง), กปด.26 (อู่พุทธมณฑลสาย 3), กปด.36 (อู่พุทธมณฑลสาย 3)',
+        '4. ปุ่ม "📷 เปิดกล้องสแกน QR" สแกนป้าย QR หน้ารถหรือข้างรถ',
+        '5. ช่องสายเดินรถ (ดึงจากเซล B) เช่น สาย 4-59, 515, 4-43, 91ก',
+        '6. ช่องเลขข้างรถ (ดึงจากเซล D) เช่น 50010, 55001, 56070',
+        '7. แสดงยี่ห้อ/รุ่นรถ (เซล C: ISUZU) และ ทะเบียนรถ (เซล E เช่น 11-8991)',
+        '8. เมนู "ค้นหาจากบัญชีรถ 326 คันของเขต 6" และปุ่ม Quick Test จำลองสแกนด่วน',
+        '9. ปุ่ม "เริ่มต้นตรวจสอบสภาพรถ (ไปขั้นตอนที่ 2) →"'
       ],
       keyHighlights: [
         {
+          icon: 'badge',
+          title: 'ดึงชื่อจาก ID อัตโนมัติ',
+          desc: 'เพียงพิมพ์เลขประจำตัวพนักงาน 5-6 หลัก ระบบจะแสดงชื่อ-นามสกุลทันที'
+        },
+        {
           icon: 'qr_code_scanner',
-          title: 'สแกน QR Code อัจฉริยะ',
-          desc: 'แยกสายเดินรถ (เซล B) และเลขข้างรถ (เซล D) อัตโนมัติในเสี้ยววินาที'
+          title: 'สแกน QR เซล B และ เซล D',
+          desc: 'ดึงสายเดินรถจากเซล B และเลขข้างรถจากเซล D พร้อมข้อมูลทะเบียนรถครบถ้วน'
         },
         {
           icon: 'directions_bus',
-          title: 'ฐานข้อมูล 326 คันในตัว',
-          desc: 'มีข้อมูลทะเบียนรถ ยี่ห้อ และรุ่นของเขต 6 ครบถ้วน ไม่ต้องพิมพ์เอง'
-        },
-        {
-          icon: 'lock',
-          title: 'ตรวจสอบความถูกต้อง',
-          desc: 'ปุ่มไปขั้นตอนที่ 2 จะเปิดใช้งานเมื่อกรอกข้อมูลจำเป็นครบถ้วน'
+          title: 'บัญชีกองรถ 326 คัน',
+          desc: 'มีฐานข้อมูลรถโดยสาร ISUZU ครบทั้ง 326 คันของเขตการเดินรถที่ 6'
         }
       ],
       uiMockup: (
@@ -72,61 +74,79 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
               <span className="w-3 h-3 rounded-full bg-amber-500"></span>
               <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
               <span className="font-bold text-slate-300 text-[12px] ml-2">
-                หน้าจอ Step 1: ข้อมูลผู้ตรวจและข้อมูลรถ
+                Step 1: ข้อมูลผู้ตรวจและรถโดยสาร (ขสมก. เขต 6)
               </span>
             </div>
             <span className="px-2 py-0.5 rounded bg-[#005c55] text-[11px] font-bold text-white">
-              ขั้นตอนที่ 1 จาก 3
+              ขั้นตอนที่ 1 / 3
             </span>
           </div>
 
           {/* Form Content Mock */}
           <div className="space-y-2.5 bg-slate-800/80 p-3 rounded-xl border border-slate-700">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-emerald-400">1. ข้อมูลผู้ตรวจสอบ & สังกัด</span>
-              <span className="text-[11px] text-slate-400">ผู้ตรวจการเขต 6</span>
+              <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[16px]">badge</span>
+                <span>ส่วนที่ 1: ข้อมูลผู้ตรวจสอบ</span>
+              </span>
+              <span className="text-[11px] text-slate-400">ระบบจำรหัสผู้ตรวจ</span>
             </div>
             <div className="grid grid-cols-2 gap-2 text-[12px]">
               <div className="bg-slate-700/80 p-2 rounded-lg border border-slate-600">
-                <span className="text-slate-400 block text-[10px]">ชื่อผู้ตรวจ:</span>
-                <span className="text-white font-semibold">นายสมศักดิ์ ขสมก. (60124)</span>
+                <span className="text-slate-400 block text-[10px]">เลขประจำตัว (ID):</span>
+                <span className="text-emerald-300 font-bold text-[13px]">60124</span>
               </div>
               <div className="bg-slate-700/80 p-2 rounded-lg border border-slate-600">
-                <span className="text-slate-400 block text-[10px]">สังกัดกลุ่มงาน:</span>
-                <span className="text-white font-semibold">กปด.36 (อู่ไร่ขิง)</span>
+                <span className="text-slate-400 block text-[10px]">ชื่อ-นามสกุล (NAME):</span>
+                <span className="text-white font-semibold">นายสมศักดิ์ ขสมก.</span>
               </div>
+            </div>
+            <div className="bg-slate-700/80 p-2 rounded-lg border border-slate-600">
+              <span className="text-slate-400 block text-[10px]">สังกัดกลุ่มงานปฏิบัติการเดินรถ:</span>
+              <span className="text-amber-300 font-bold text-[12px]">กปด.36 (อู่พุทธมณฑลสาย 3)</span>
             </div>
 
             <div className="pt-2 border-t border-slate-700 flex items-center justify-between">
-              <span className="font-bold text-emerald-400">2. ข้อมูลรถโดยสารประจำทาง</span>
+              <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[16px]">directions_bus</span>
+                <span>ส่วนที่ 2: ข้อมูลรถโดยสาร (เขต 6)</span>
+              </span>
               <span className="px-2 py-0.5 bg-emerald-900/60 text-emerald-300 rounded text-[10px] font-bold">
-                📷 รองรับสแกน QR
+                QR Scanner พร้อมใช้
               </span>
             </div>
 
             {/* QR Scan Action Bar Mock */}
-            <div className="bg-gradient-to-r from-emerald-950/60 to-slate-900 p-2.5 rounded-lg border border-emerald-700/40 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-emerald-950/70 via-slate-800 to-slate-900 p-2.5 rounded-lg border border-emerald-600/50 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-emerald-400 text-[20px]">
+                <span className="material-symbols-outlined text-emerald-400 text-[20px] animate-pulse">
                   qr_code_scanner
                 </span>
-                <span className="text-[12px] font-bold text-emerald-200">สแกน QR หน้ารถ/ข้างรถ</span>
+                <div>
+                  <span className="text-[12px] font-bold text-white block">สแกน QR Code ประจำรถ</span>
+                  <span className="text-[10px] text-emerald-300">ดึงสาย (เซล B) & เลขข้างรถ (เซล D)</span>
+                </div>
               </div>
-              <span className="px-2.5 py-1 bg-emerald-600 text-white rounded-md text-[11px] font-bold">
-                เปิดกล้องสแกน QR
+              <span className="px-3 py-1 bg-[#005c55] text-white rounded-lg text-[11px] font-bold shadow-xs">
+                📷 เปิดกล้องสแกน
               </span>
             </div>
 
             {/* Selected Bus Info Display */}
             <div className="grid grid-cols-2 gap-2 text-[12px]">
-              <div className="bg-slate-700/80 p-2 rounded-lg border border-emerald-500/40">
+              <div className="bg-slate-700/80 p-2 rounded-lg border border-emerald-500/50">
                 <span className="text-slate-400 block text-[10px]">สายเดินรถ (เซล B):</span>
                 <span className="text-emerald-300 font-bold text-[14px]">สาย 4-59</span>
               </div>
-              <div className="bg-slate-700/80 p-2 rounded-lg border border-emerald-500/40">
+              <div className="bg-slate-700/80 p-2 rounded-lg border border-emerald-500/50">
                 <span className="text-slate-400 block text-[10px]">เลขข้างรถ (เซล D):</span>
                 <span className="text-emerald-300 font-bold text-[14px]">50010</span>
               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
+              <div className="bg-slate-700/50 p-1.5 rounded">ยี่ห้อ: <strong>ISUZU</strong></div>
+              <div className="bg-slate-700/50 p-1.5 rounded">ทะเบียน: <strong className="text-amber-300">11-8991</strong></div>
             </div>
           </div>
 
@@ -142,34 +162,37 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
     },
     {
       id: 'qr-scanner',
-      title: 'เมนูสแกน QR Code ประจำรถ (QR Scanner)',
-      badge: 'QR Code',
+      title: 'หน้าต่างสแกน QR Code ประจำรถ (QR Scanner Modal)',
+      badge: 'QR Scanner',
       icon: 'qr_code_2',
-      subtitle: 'ระบบสแกนและแยกข้อมูลสายเดินรถและเลขข้างรถอัตโนมัติ',
+      subtitle: 'ระบบสแกนกล้องสด รองรับไฟล์ Excel databusnumber.xlsx (เซล B, D, E, F)',
       description:
-        'หน้าต่าง Modal สำหรับสแกน QR Code ประจำรถ ขสมก. เขต 6 ด้วยกล้องถ่ายรูป หรือเลือกไฟล์ภาพ ระบบจะถอดรหัสและแยกข้อมูล สายเดินรถ (ดึงจากเซล B) และ เลขข้างรถ (ดึงจากเซล D) พร้อมทั้งดึงข้อมูลรุ่นรถและทะเบียนรถมาใส่ในแบบฟอร์มทันที',
+        'หน้าต่าง Modal สำหรับสแกน QR Code ประจำรถ ขสมก. เขต 6 ด้วยกล้องสด หรือเลือกรูปภาพ QR จากโทรศัพท์ ตัวสแกนรองรับข้อมูลที่ส่งออกจากตาราง Excel โดยดึงสายเดินรถจากเซล B, เลขข้างรถจากเซล D, รุ่นรถ ISUZU จากเซล C, ทะเบียนรถจากเซล E และ JSON Payload ในเซล F พร้อมทั้งมีระบบค้นหาและเลือกจากบัญชีรถ 326 คันได้โดยตรง',
       screenSummary: [
-        '1. หน้าต่างส่องกล้องสแกนแบบ Real-time พร้อมเส้นเล็งเป้า',
-        '2. แท็บ "เปิดกล้องสแกน" ส่องกล้องไปที่ QR Code หน้ารถหรือข้างรถ',
-        '3. แท็บ "เลือกรูปภาพ" สำหรับอัปโหลดภาพ QR Code จากอัลบั้ม',
-        '4. แท็บ "ทะเบียนรถ 326 คัน" สำหรับค้นหาและเลือกคันรถได้โดยตรง',
-        '5. แถบทดสอบจำลองสแกนด่วน (Quick Test) เช่น สาย 4-59 (50010), 515 (56070), 4-43 (55001), 91ก (50035)'
+        '1. หน้าต่างส่องกล้องสแกนแบบ Real-time พร้อมเส้นเล็งเป้าและเลเซอร์สีเขียว',
+        '2. การดึงข้อมูลอัตโนมัติ: สายเดินรถ (เซล B) และ เลขข้างรถ (เซล D)',
+        '3. การตรวจจับและจับคู่ทะเบียนรถ ขสมก. (เช่น 11-8991) และรุ่นรถ ISUZU',
+        '4. ปุ่มเปิด/ปิดไฟฉาย (Flashlight) สำหรับสแกนในที่มืด หรือเวลากลางคืน',
+        '5. ปุ่มสลับกล้องหน้า-หลัง (Switch Camera)',
+        '6. ปุ่มอัปโหลดรูปภาพ QR Code จากแกลเลอรีภาพในเครื่อง',
+        '7. ปุ่มค้นหาด่วนจากบัญชีรถ 326 คันของเขต 6',
+        '8. ปุ่ม Quick Test จำลองสแกนด่วน (4-59, 515, 4-43, 91ก)'
       ],
       keyHighlights: [
         {
-          icon: 'auto_awesome',
-          title: 'แยกข้อมูลอัตโนมัติ',
-          desc: 'ดึงสายเดินรถ (Bus line) และเลขข้างรถ (Bus number) เข้าฟอร์มทันที'
+          icon: 'table_view',
+          title: 'ตรงตามโครงสร้าง Excel ขสมก.',
+          desc: 'แยกเซล B (สาย) และเซล D (เลขข้างรถ) ได้แม่นยำ 100%'
         },
         {
           icon: 'flash_on',
-          title: 'สแกนไวและแม่นยำ',
-          desc: 'รองรับกล้องทุกรุ่นพร้อมเปิดไฟแฟลชและสลับกล้องหน้า-หลัง'
+          title: 'สแกนไวในเสี้ยววินาที',
+          desc: 'ตรวจจับ QR ทันทีที่เข้าสู่กรอบเล็งเป้า พร้อมเสียงและสั่นเตือน'
         },
         {
-          icon: 'verified',
-          title: 'จับคู่ทะเบียนรถ',
-          desc: 'ค้นหาเลขทะเบียน ขสมก. เช่น 11-8991 และยี่ห้อ ISUZU ให้อัตโนมัติ'
+          icon: 'fact_check',
+          title: 'แสดงผลตรวจสอบทันที',
+          desc: 'แถบสีเขียวยืนยันข้อมูลรถพร้อมปุ่มนำเข้าข้อมูลสู่แบบฟอร์ม'
         }
       ],
       uiMockup: (
@@ -179,7 +202,7 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
               <span className="material-symbols-outlined text-emerald-400 text-[18px]">
                 qr_code_scanner
               </span>
-              <span className="font-bold text-white text-[13px]">หน้าต่างสแกน QR Code ประจำรถ</span>
+              <span className="font-bold text-white text-[13px]">สแกน QR Code ประจำรถ (เขต 6)</span>
             </div>
             <span className="text-[11px] text-slate-400">ปิด (ESC)</span>
           </div>
@@ -187,29 +210,36 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
           {/* Scanner Viewport Mock */}
           <div className="relative bg-black rounded-xl h-44 flex flex-col items-center justify-center overflow-hidden border border-slate-700">
             {/* Target Box */}
-            <div className="w-32 h-32 border-2 border-emerald-400 rounded-xl relative flex items-center justify-center">
+            <div className="w-32 h-32 border-2 border-emerald-400 rounded-xl relative flex items-center justify-center shadow-[0_0_20px_rgba(52,211,153,0.3)]">
               <div className="w-24 h-24 bg-white/10 rounded-lg flex items-center justify-center">
                 <span className="material-symbols-outlined text-emerald-400 text-[40px] animate-pulse">
                   qr_code_2
                 </span>
               </div>
               {/* Scan beam line */}
-              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-red-500 shadow-[0_0_8px_#ef4444]"></div>
+              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-emerald-400 shadow-[0_0_10px_#34d399] animate-bounce"></div>
             </div>
-            <span className="absolute bottom-2 bg-black/80 text-white text-[10px] px-3 py-1 rounded-full">
-              📷 ส่องกล้องไปที่ QR Code หน้ารถหรือข้างรถ
+
+            {/* Quick helper controls inside camera */}
+            <div className="absolute top-2 right-2 flex gap-1">
+              <span className="p-1 bg-black/60 rounded text-slate-300 text-[10px]">🔦 ไฟฉาย</span>
+              <span className="p-1 bg-black/60 rounded text-slate-300 text-[10px]">🔄 สลับกล้อง</span>
+            </div>
+
+            <span className="absolute bottom-2 bg-black/80 text-white text-[10px] px-3 py-1 rounded-full border border-emerald-500/30">
+              📷 เล็งกล้องไปที่ QR Code หน้ารถหรือข้างรถ
             </span>
           </div>
 
           {/* Result Tag Mock */}
-          <div className="bg-emerald-950/70 border border-emerald-600/50 p-2.5 rounded-xl flex items-center justify-between">
+          <div className="bg-emerald-950/80 border border-emerald-500/60 p-2.5 rounded-xl flex items-center justify-between">
             <div>
-              <span className="text-[10px] text-emerald-400 block font-bold">ผลการสแกนสำเร็จ:</span>
+              <span className="text-[10px] text-emerald-400 block font-bold">✓ ดึงข้อมูลจากเซล B และ D สำเร็จ:</span>
               <span className="font-bold text-white text-[13px]">
-                สาย 4-59 • เลขข้างรถ 50010 (ISUZU)
+                สาย 4-59 • เลขข้างรถ 50010 (ISUZU 11-8991)
               </span>
             </div>
-            <span className="px-2.5 py-1 bg-emerald-600 text-white text-[11px] font-bold rounded-lg">
+            <span className="px-2.5 py-1 bg-emerald-600 text-white text-[11px] font-bold rounded-lg shadow-xs">
               นำเข้าข้อมูล
             </span>
           </div>
@@ -221,19 +251,18 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
       title: 'ขั้นตอนที่ 2: ตรวจ 3 ชุดรายการมาตรฐาน (Step 2)',
       badge: 'Step 2',
       icon: 'checklist',
-      subtitle: 'ระบบเช็คลิสต์ 3 ชุดหลัก (ภายนอก, ภายใน, เครื่องยนต์) พร้อมถ่ายภาพยืนยัน',
+      subtitle: 'เช็คลิสต์ 3 ชุดหลัก (ภายนอก, ภายใน, เครื่องยนต์) + ถ่ายภาพ 3 รูปยืนยัน',
       description:
-        'หัวใจหลักของการตรวจสภาพรถ แบ่งออกเป็น 3 ชุดรายการตามมาตรฐานความปลอดภัย ขสมก. แต่ละชุดบังคับถ่ายภาพยืนยัน 1 ภาพ (พร้อมประทับลายน้ำ) และประเมินรายการย่อย ผ่าน/ไม่ผ่าน มีปุ่มลัด "ผ่านทั้งหมดในชุดนี้" เพื่อความรวดเร็ว',
+        'ขั้นตอนการตรวจสภาพรถตามมาตรฐานความปลอดภัย ขสมก. เขต 6 แบ่งการตรวจสอบออกเป็น 3 ชุดรายการหลักชัดเจน ได้แก่ 1. ภายนอกตัวรถ, 2. ภายในห้องโดยสาร และ 3. ระบบเครื่องยนต์และช่วงล่าง แต่ละชุดบังคับถ่ายภาพยืนยัน 1 ภาพ (รวม 3 ภาพ) และมีปุ่มทางลัด "✓ ผ่านทั้งหมดในชุดนี้" ช่วยให้ผู้ตรวจทำงานได้รวดเร็ว',
       screenSummary: [
-        '1. แถบสรุปภาพรวมและความคืบหน้า (Sticky Progress Strip)',
-        '2. แถบปุ่มทางลัดกระโดด 3 ชุด (Jump Strip): ภายนอก (1), ภายใน (2), เครื่องยนต์ (3)',
-        '3. ชุดที่ 1: ภายนอกตัวรถ (ถ่าย 1 ภาพยืนยัน + ตรวจสอบ 6 รายการย่อย)',
-        '4. ชุดที่ 2: ภายในห้องโดยสาร (ถ่าย 1 ภาพยืนยัน + ตรวจสอบ 5 รายการย่อย)',
-        '5. ชุดที่ 3: ระบบเครื่องยนต์ (ถ่าย 1 ภาพยืนยัน + ตรวจสอบ 4 รายการย่อย)',
-        '6. ปุ่มทางลัด "ผ่านทั้งหมดในชุดนี้" ประจำแต่ละการ์ด',
-        '7. ปุ่มตัวอย่างด่วน (Quick Demo) สำหรับทดสอบระบบแบบรวดเร็ว',
-        '8. ช่องระบุอาการชำรุด/ข้อบกพร่อง เมื่อเลือกสถานะ "ไม่ผ่าน"',
-        '9. ปุ่ม "สรุปผลและบันทึกข้อมูล (ไปขั้นตอนที่ 3) →"'
+        '1. แถบความคืบหน้าด้านบน (Sticky Progress Bar 0 - 100%)',
+        '2. แถบปุ่มทางลัด 3 ชุด (Jump Strip): 1. ภายนอก, 2. ภายใน, 3. เครื่องยนต์',
+        '3. ชุดที่ 1: ภายนอกตัวรถ (ถ่ายภาพ 1 ภาพ + เช็ค 4 รายการ: ตัวถัง สี, ไฟส่องสว่าง, ยางรถ, ป้ายสาย)',
+        '4. ชุดที่ 2: ภายในห้องโดยสาร (ถ่ายภาพ 1 ภาพ + เช็ค 4 รายการ: เบาะ/ราวจับ, ประตู, CCTV/แอร์, ค้อน/ถังดับเพลิง)',
+        '5. ชุดที่ 3: ระบบเครื่องยนต์ (ถ่ายภาพห้องเครื่อง 1 ภาพ + เช็ค 4 รายการ: รอยรั่วซึม, น้ำมันเครื่อง, ลมเบรก, ควันดำ)',
+        '6. ปุ่ม "✓ ผ่านทั้งหมดในชุดนี้" ประจำแต่ละชุด กดครั้งเดียวผ่านทุกข้อในชุดนั้น',
+        '7. ปุ่มทางลัด "⚡ เติมข้อมูลทดสอบด่วน (Quick Demo)" สำหรับทดสอบระบบ',
+        '8. ปุ่ม "สรุปผลและบันทึกข้อมูล (ไปขั้นตอนที่ 3) →"'
       ],
       keyHighlights: [
         {
@@ -247,9 +276,9 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
           desc: 'คลิกเดียวปรับสถานะรายการย่อยทั้งหมดในชุดนั้นเป็น "ผ่าน" ทันที'
         },
         {
-          icon: 'report_problem',
-          title: 'ระบุข้อบกพร่องอัตโนมัติ',
-          desc: 'หากมีข้อไม่ผ่าน ระบบจะเปิดช่องบันทึกอาการและส่งต่อไปยังใบแจ้งซ่อม'
+          icon: 'assignment_turned_in',
+          title: 'สรุปผลก่อนส่งคลาวด์',
+          desc: 'ปุ่มส่งข้อมูลจะนำเข้าสู่หน้าต่างสรุปผลและลงนามอย่างเป็นทางการ'
         }
       ],
       uiMockup: (
@@ -258,7 +287,7 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div className="flex items-center gap-2">
               <span className="font-bold text-white text-[13px]">
-                Step 2: การตรวจสภาพ 3 ชุดรายการมาตรฐาน
+                Step 2: การตรวจ 3 ชุดรายการมาตรฐาน
               </span>
               <span className="text-[11px] bg-emerald-900/60 text-emerald-300 px-2 py-0.5 rounded font-bold">
                 สาย 4-59 (50010)
@@ -271,11 +300,11 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
           <div className="grid grid-cols-3 gap-1.5 text-[11px]">
             <div className="bg-emerald-950/80 border border-emerald-600 p-1.5 rounded-lg text-center">
               <span className="font-bold text-emerald-300 block">1. ภายนอก</span>
-              <span className="text-[10px] text-emerald-400">✓ ภาพครบ • 6/6 ข้อ</span>
+              <span className="text-[10px] text-emerald-400">✓ ภาพครบ • 4/4 ข้อ</span>
             </div>
             <div className="bg-emerald-950/80 border border-emerald-600 p-1.5 rounded-lg text-center">
               <span className="font-bold text-emerald-300 block">2. ภายใน</span>
-              <span className="text-[10px] text-emerald-400">✓ ภาพครบ • 5/5 ข้อ</span>
+              <span className="text-[10px] text-emerald-400">✓ ภาพครบ • 4/4 ข้อ</span>
             </div>
             <div className="bg-emerald-950/80 border border-emerald-600 p-1.5 rounded-lg text-center">
               <span className="font-bold text-emerald-300 block">3. เครื่องยนต์</span>
@@ -292,14 +321,14 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
                 </span>
                 <span className="font-bold text-white text-[12px]">ชุดที่ 1: ภายนอกตัวรถ</span>
               </div>
-              <span className="text-[10px] bg-emerald-600/30 text-emerald-300 px-2 py-0.5 rounded font-bold">
-                ผ่านทั้งหมดในชุดนี้
+              <span className="text-[10px] bg-emerald-600/40 text-emerald-300 px-2 py-0.5 rounded font-bold">
+                ✓ ผ่านทั้งหมดในชุดนี้
               </span>
             </div>
 
             {/* Photo proof bar */}
             <div className="flex items-center justify-between bg-slate-900/60 p-2 rounded-lg border border-slate-700 text-[11px]">
-              <span className="text-slate-300">📷 ภาพหลักฐานประจำชุด: มีรูปแล้ว</span>
+              <span className="text-slate-300">📷 ภาพถ่ายภายนอก: บันทึกและประทับลายน้ำแล้ว</span>
               <span className="text-emerald-400 font-bold">✓ ตรวจสอบแล้ว</span>
             </div>
 
@@ -310,7 +339,7 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
                 <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
               </div>
               <div className="flex items-center justify-between bg-slate-700/50 p-1.5 rounded">
-                <span>1.2 ยางรถยนต์ ความดันลม และน็อตล้อ</span>
+                <span>1.2 ระบบไฟส่องสว่าง & ยางรถยนต์</span>
                 <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
               </div>
             </div>
@@ -326,36 +355,37 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
     },
     {
       id: 'photo-watermark',
-      title: 'เมนูถ่ายภาพ & ประทับลายน้ำ (Photo & Watermark)',
-      badge: 'Photo Proof',
+      title: 'เมนูถ่ายภาพ & ประทับลายน้ำ (Photo Evidence & Watermark)',
+      badge: 'Photo Evidence',
       icon: 'photo_camera',
-      subtitle: 'ระบบถ่ายภาพสด บันทึกหลักฐาน และประทับลายน้ำข้อมูลรถ/เวลาอัตโนมัติ',
+      subtitle: 'ระบบประทับลายน้ำข้อมูลรถ สายเดินรถ เลขข้างรถ และเวลาลงในรูปภาพอัตโนมัติ',
       description:
-        'หน้าต่าง Modal สำหรับถ่ายภาพหลักฐานการตรวจชุดรายการ ระบบจะเปิดกล้องถ่ายภาพจริง หรือให้อัปโหลดภาพ พร้อมทั้งประทับข้อความลายน้ำ (Watermark) ระบุสังกัด ขสมก. เขต 6, สายรถ, เลขข้างรถ, ผู้ตรวจการ, วันที่และเวลาที่บันทึกจริงลงในเนื้อไฟล์ภาพ ป้องกันการปลอมแปลง',
+        'หน้าต่าง Modal สำหรับถ่ายภาพหลักฐานการตรวจสภาพรถแต่ละชุด ระบบจะเปิดกล้องสด หรือให้อัปโหลดภาพ พร้อมทั้งประทับข้อความลายน้ำ (Automated Watermark) ระบุสังกัด ขสมก. เขตการเดินรถที่ 6, สายเดินรถ (เซล B: 4-59), เลขข้างรถ (เซล D: 50010), รหัสผู้ตรวจการ, วันที่ และเวลาจริงลงในไฟล์ภาพ ป้องกันการสวมรอย',
       screenSummary: [
-        '1. ปุ่ม "เปิดกล้องถ่ายภาพสด" หรือ "อัปโหลดภาพจากเครื่อง"',
-        '2. กรอบพรีวิวรูปภาพพร้อมการปรับหมุน (Rotate 90°)',
-        '3. แถบประทับลายน้ำดิจิทัล (Digital Watermark Badge):',
-        '   - สังกัด: องค์การขนส่งมวลชนกรุงเทพ (ขสมก. เขตการเดินรถที่ 6)',
-        '   - สายเดินรถ & เลขข้างรถ เช่น สาย 4-59 (เลขข้างรถ: 50010)',
-        '   - ชื่อผู้ตรวจการ & วันที่-เวลาบันทึก (Timestamp)',
-        '4. ปุ่ม "ยืนยันและใช้ภาพนี้ประจำชุด"'
+        '1. ปุ่ม "เปิดกล้องถ่ายภาพสด" หรือ "เลือกภาพถ่ายจากเครื่อง"',
+        '2. กรอบพรีวิวรูปภาพความละเอียดสูง พร้อมปุ่มหมุนภาพ 90° (Rotate)',
+        '3. แถบประทับลายน้ำดิจิทัลอัตโนมัติ (Automated Watermark):',
+        '   - สังกัด: ขสมก. เขตการเดินรถที่ 6 (กปด.36)',
+        '   - สายเดินรถ & เลขข้างรถ: สาย 4-59 (50010) ISUZU',
+        '   - ผู้ตรวจ: นายสมศักดิ์ ขสมก. (รหัส 60124)',
+        '   - วันที่และเวลาจริงตามนาฬิกาเครื่อง (Timestamp)',
+        '4. ปุ่ม "ยืนยันภาพถ่ายประจำชุดนี้" และปุ่ม "ถ่ายใหม่"'
       ],
       keyHighlights: [
         {
           icon: 'branding_watermark',
           title: 'ประทับลายน้ำอัตโนมัติ',
-          desc: 'บันทึกเวลา สายรถ และเลขข้างรถลงในภาพถ่ายทันที ไม่สามารถแก้ไขได้'
+          desc: 'ระบุข้อมูลรถและเวลาลงในภาพถ่ายทันที ไม่สามารถปลอมแปลงได้'
         },
         {
-          icon: 'security',
-          title: 'ความโปร่งใสของข้อมูล',
-          desc: 'ใช้เป็นหลักฐานยืนยันว่าได้ตรวจสภาพรถจริงก่อนปล่อยรถออกให้บริการ'
+          icon: 'verified',
+          title: 'ยืนยันความถูกต้อง',
+          desc: 'ใช้เป็นหลักฐานทางการยืนยันสภาพรถก่อนปล่อยรถออกบริการ'
         },
         {
-          icon: 'tune',
+          icon: 'rotate_right',
           title: 'ปรับหมุนและพรีวิว',
-          desc: 'หมุนภาพ 90 องศาได้หากถ่ายในแนวนอนหรือแนวตั้งผิดทิศทาง'
+          desc: 'หมุนภาพ 90 องศาได้สะดวกทั้งภาพแนวนอนและแนวตั้ง'
         }
       ],
       uiMockup: (
@@ -376,10 +406,10 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
           <div className="relative bg-slate-950 rounded-xl h-44 overflow-hidden border border-slate-700 flex items-center justify-center">
             {/* Bus Silhouette Illustration */}
             <div className="text-center space-y-1">
-              <span className="material-symbols-outlined text-slate-600 text-[48px]">
+              <span className="material-symbols-outlined text-emerald-400 text-[48px]">
                 directions_bus
               </span>
-              <p className="text-[11px] text-slate-500 font-semibold">[ภาพตัวอย่างภายนอกตัวรถ]</p>
+              <p className="text-[11px] text-slate-300 font-semibold">[ภาพตัวอย่างภายนอกตัวรถ]</p>
             </div>
 
             {/* Watermark Overlay at Bottom */}
@@ -389,8 +419,8 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
                 <span>สาย 4-59 (50010)</span>
               </div>
               <div className="text-slate-300 flex items-center justify-between mt-0.5">
-                <span>ผู้ตรวจ: นายสมศักดิ์ ขสมก.</span>
-                <span>28/08/2026 08:30 น.</span>
+                <span>ผู้ตรวจ: นายสมศักดิ์ ขสมก. (60124)</span>
+                <span>22/09/2026 08:30 น.</span>
               </div>
             </div>
           </div>
@@ -409,36 +439,36 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
     },
     {
       id: 'summary-modal',
-      title: 'หน้าต่างสรุปผลการตรวจสอบ (Inspection Summary)',
+      title: 'หน้าต่างสรุปผลและลงนามส่งรายงาน (Inspection Summary Modal)',
       badge: 'Summary',
       icon: 'fact_check',
-      subtitle: 'การตรวจทานผลการตรวจ 3 ชุด ภาพถ่ายหลักฐาน และการบันทึกลงระบบ',
+      subtitle: 'ตรวจทานผลการตรวจ 3 ชุด ภาพถ่ายหลักฐาน ลายมือชื่อ และบันทึก Cloud Firestore',
       description:
-        'หน้าต่างสำหรับสรุปและตรวจทานข้อมูลทั้งหมดก่อนบันทึกลงระบบ Cloud Firestore แสดงสถานะการผ่านเกณฑ์ พรีวิวภาพถ่ายทั้ง 3 ชุด รายการข้อบกพร่องที่พบ (ถ้ามี) และช่องสำหรับให้หัวหน้างานบันทึกคำสั่งการเพิ่มเติม',
+        'หน้าต่าง Modal สำหรับตรวจทานผลการตรวจสภาพรถทั้งหมดก่อนส่งขึ้น Cloud Firestore แสดงสถานะความพร้อมของรถ (พร้อมบริการ 100% หรือ พบข้อบกพร่อง) พรีวิวภาพถ่ายยืนยัน 3 ชุด สรุปรายการผ่าน/ไม่ผ่าน คำสั่งการหัวหน้างาน และช่องลงนามดิจิทัล (Digital Signature)',
       screenSummary: [
-        '1. ป้ายแจ้งสถานะภาพรวม (ผ่านเกณฑ์มาตรฐานครบ 3 ชุด / พบข้อบกพร่องต้องส่งซ่อม)',
-        '2. ข้อมูลสรุปสายเดินรถ เลขข้างรถ ผู้ตรวจ และสังกัด',
-        '3. พรีวิวภาพถ่ายหลักฐานยืนยันทั้ง 3 ชุด (ภายนอก, ภายใน, เครื่องยนต์)',
-        '4. กล่องสรุปคะแนน: ผ่านกี่รายการ, ไม่ผ่านกี่รายการ',
-        '5. กล่องแจกแจงรายการข้อบกพร่องที่พบพร้อมหมายเหตุอาการชำรุด',
-        '6. ช่องบันทึกคำสั่งการของหัวหน้างาน / ผู้ตรวจการ (Supervisor Note)',
-        '7. ปุ่ม "ยืนยันและบันทึกข้อมูล" (บันทึกขึ้น Cloud ทันที พร้อมเอฟเฟกต์ Confetti ฉลองเมื่อผ่านครบ)'
+        '1. ป้ายแจ้งสถานะภาพรวม: "✓ ผ่านเกณฑ์มาตรฐานครบทั้ง 3 ชุด (พร้อมบริการ)" หรือ "พบข้อบกพร่อง"',
+        '2. ข้อมูลสรุปสายเดินรถ (เซล B) เลขข้างรถ (เซล D) ผู้ตรวจ และสังกัด กปด.',
+        '3. พรีวิวภาพถ่ายหลักฐานยืนยันครบทั้ง 3 ชุด (ภายนอก, ภายใน, เครื่องยนต์)',
+        '4. กล่องสรุปคะแนน: ผ่าน 12/12 รายการ หรือแจกแจงข้อที่ชำรุด',
+        '5. ช่องบันทึกคำสั่งการของหัวหน้างาน / ผู้ตรวจการ (Supervisor Note)',
+        '6. ช่องลงลายมือชื่อดิจิทัล (Digital Signature)',
+        '7. ปุ่ม "ยืนยันและบันทึกข้อมูล (ส่งรายงาน)" ซิงค์ขึ้น Cloud Firestore ทันที'
       ],
       keyHighlights: [
         {
           icon: 'cloud_done',
-          title: 'บันทึก Real-time ทันที',
+          title: 'ซิงค์ Cloud Firestore',
           desc: 'ข้อมูลถูกส่งเข้าสู่ฐานข้อมูลกลางของเขต 6 ทันทีที่กดยืนยัน'
         },
         {
-          icon: 'celebration',
-          title: 'ตรวจผ่านพร้อมบริการ',
-          desc: 'หากผ่านครบทุกข้อ รถจะได้รับสถานะ "พร้อมบริการ" ทันที'
+          icon: 'draw',
+          title: 'ลงลายมือชื่อดิจิทัล',
+          desc: 'เซ็นชื่อกำกับผลการตรวจบนหน้าจอได้ทันทีเพื่อความสมบูรณ์ของเอกสาร'
         },
         {
-          icon: 'build',
-          title: 'เชื่อมโยงใบแจ้งซ่อม',
-          desc: 'หากมีรายการไม่ผ่าน จะจัดทำรายการข้อบกพร่องเตรียมส่งให้นายช่าง'
+          icon: 'verified',
+          title: 'รับรองสถานะพร้อมบริการ',
+          desc: 'รถที่ผ่านครบ 3 ชุด จะได้รับสถานะ "พร้อมบริการ 100%" ทันที'
         }
       ],
       uiMockup: (
@@ -447,7 +477,7 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
             <span className="font-bold text-white text-[13px]">
               สรุปผลการตรวจสอบสภาพรถ 3 ชุดรายการ
             </span>
-            <span className="text-[11px] text-slate-400">ตรวจทาน</span>
+            <span className="text-[11px] text-slate-400">ตรวจทานก่อนส่ง</span>
           </div>
 
           {/* Status Banner Mock */}
@@ -460,10 +490,10 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
                 <span className="font-bold text-emerald-300 text-[12px] block">
                   ผ่านเกณฑ์มาตรฐานครบทั้ง 3 ชุด
                 </span>
-                <span className="text-[10px] text-emerald-400/80">รถพร้อมออกให้บริการ</span>
+                <span className="text-[10px] text-emerald-400/80">รถพร้อมออกให้บริการ 100%</span>
               </div>
             </div>
-            <span className="px-2 py-0.5 bg-emerald-600 text-white font-bold rounded-full text-[10px]">
+            <span className="px-2.5 py-0.5 bg-emerald-600 text-white font-bold rounded-full text-[10px]">
               พร้อมบริการ
             </span>
           </div>
@@ -471,50 +501,50 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
           {/* 3 Photos Mini Preview */}
           <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
             <div className="bg-slate-800 p-1 rounded-lg border border-slate-700">
-              <div className="h-10 bg-slate-700 rounded flex items-center justify-center mb-1">
-                📷 1
+              <div className="h-10 bg-slate-700 rounded flex items-center justify-center mb-1 text-emerald-400">
+                📷 ภายนอก
               </div>
-              <span className="text-slate-300">ภายนอก</span>
+              <span className="text-slate-300">ชุดที่ 1</span>
             </div>
             <div className="bg-slate-800 p-1 rounded-lg border border-slate-700">
-              <div className="h-10 bg-slate-700 rounded flex items-center justify-center mb-1">
-                📷 2
+              <div className="h-10 bg-slate-700 rounded flex items-center justify-center mb-1 text-emerald-400">
+                📷 ภายใน
               </div>
-              <span className="text-slate-300">ภายใน</span>
+              <span className="text-slate-300">ชุดที่ 2</span>
             </div>
             <div className="bg-slate-800 p-1 rounded-lg border border-slate-700">
-              <div className="h-10 bg-slate-700 rounded flex items-center justify-center mb-1">
-                📷 3
+              <div className="h-10 bg-slate-700 rounded flex items-center justify-center mb-1 text-emerald-400">
+                📷 เครื่องยนต์
               </div>
-              <span className="text-slate-300">เครื่องยนต์</span>
+              <span className="text-slate-300">ชุดที่ 3</span>
             </div>
           </div>
 
           {/* Action button */}
           <div className="py-2.5 bg-[#005c55] text-white font-bold text-center rounded-xl flex items-center justify-center gap-1.5 shadow-md">
             <span className="material-symbols-outlined text-[18px]">save</span>
-            <span>ยืนยันและบันทึกข้อมูล (ส่งรายงาน)</span>
+            <span>ยืนยันและบันทึกข้อมูล (ส่งรายงานขึ้น Cloud)</span>
           </div>
         </div>
       )
     },
     {
       id: 'step3',
-      title: 'ขั้นตอนที่ 3: แดชบอร์ด & รายการบันทึก (Step 3)',
+      title: 'ขั้นตอนที่ 3: แดชบอร์ดสรุปผล Real-time Cloud (Step 3)',
       badge: 'Step 3',
       icon: 'dashboard',
-      subtitle: 'ศูนย์รวมข้อมูลสถิติ สรุปผล Real-time การดูภาพถ่ายย้อนหลัง และการพิมพ์รายงาน',
+      subtitle: 'ศูนย์รวมสถิติกองรถ, ส่งออก Excel/CSV, คัดลอกสรุปส่ง LINE, และเริ่มตรวจคันใหม่',
       description:
-        'หน้าแดชบอร์ดสรุปผลการตรวจสภาพรถทั้งหมดของเขตการเดินรถที่ 6 แสดงการ์ดสถิติประจำวัน กราฟสรุปผลแยกตามสายรถ ตารางรายการตรวจย้อนหลัง พร้อมฟังก์ชันเปิดดูภาพถ่ายหลักฐาน 3 ชุด การพิมพ์รายงาน (Print) และการส่งออกข้อมูล Excel / CSV',
+        'หน้าแดชบอร์ดสรุปผลการตรวจสภาพรถทั้งหมดของเขตการเดินรถที่ 6 เชื่อมต่อ Cloud Firestore แสดง 4 การ์ดตัวชี้วัดสำคัญ พร้อมแท็บภาพรวมวิเคราะห์สถิติ แท็บบันทึกการตรวจทั้งหมด (ดูภาพ 3 ชุดได้) แท็บรายการด่วนส่งซ่อม พร้อมฟังก์ชันส่งออก Excel/CSV, คัดลอกสรุปส่ง LINE กปด.6 และปุ่ม "🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)"',
       screenSummary: [
-        '1. การ์ดสถิติภาพรวม: รถที่ตรวจแล้ววันนี้, ผ่านเกณฑ์พร้อมวิ่ง, ชำรุด/ต้องแก้ไข',
-        '2. กราฟสรุปผลการตรวจแยกตามสายการเดินรถ (Bar Chart / Distribution)',
-        '3. ตัวกรองข้อมูลตามสายเดินรถ (4-59, 515, 4-43, 91ก...) และสถานะ',
-        '4. ตารางบันทึกการตรวจ Real-time พร้อมแสดงเลขข้างรถ ผู้ตรวจ เวลา และสถานะ',
-        '5. หน้าต่างแสดงรายละเอียด (Inspection Detail Modal) พร้อมภาพถ่ายหลักฐานทั้ง 3 ชุด',
-        '6. ปุ่มสั่งพิมพ์รายงานผลการตรวจ (Print Report)',
-        '7. ปุ่มส่งออกข้อมูล (Export to Excel / CSV)',
-        '8. ปุ่ม "เริ่มต้นตรวจคันใหม่ (เริ่มขั้นตอนที่ 1)"'
+        '1. ป้ายแจ้งสถานะการเชื่อมต่อ: "🔥 เชื่อมต่อ Cloud Firestore เรียบร้อย (Real-time)"',
+        '2. การ์ดตัวชี้วัด 4 ใบ: ตรวจแล้ววันนี้, พร้อมบริการ 100%, พบข้อบกพร่อง, ดัชนีความพร้อมกองรถ (%)',
+        '3. 3 แท็บมุมมอง: แท็บภาพรวม (Charts), แท็บบันทึกการตรวจ (Records), แท็บรายการด่วนส่งซ่อม (Urgent)',
+        '4. ปุ่มเปิดดูภาพถ่ายหลักฐานทั้ง 3 ชุด พร้อมลายน้ำในตารางบันทึกการตรวจ',
+        '5. ปุ่ม "📥 ส่งออกเป็น Excel / CSV"',
+        '6. ปุ่ม "📋 คัดลอกสรุปส่ง LINE กปด.6" (มีข้อความสรุปพร้อมส่งในกลุ่มทันที)',
+        '7. ปุ่ม "🖨️ พิมพ์รายงาน / บันทึก PDF"',
+        '8. ปุ่ม "🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)" เพื่อล้างค่าและกลับไป Step 1 พร้อมตรวจรถคันต่อไป'
       ],
       keyHighlights: [
         {
@@ -523,14 +553,14 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
           desc: 'อัปเดตสถิติและสถานะความพร้อมของรถโดยสารในเขต 6 ทันที'
         },
         {
-          icon: 'print',
-          title: 'พิมพ์ใบรายงานตรวจสภาพ',
-          desc: 'จัดหน้าแบบมาตรฐานสำหรับพิมพ์เอกสารลงกระดาษ A4 สวยงาม'
+          icon: 'chat',
+          title: 'ส่ง LINE กปด.6 ทันใจ',
+          desc: 'คัดลอกข้อความสรุปผลยอดตรวจพร้อมบริการส่งเข้ากลุ่ม LINE ได้ในคลิกเดียว'
         },
         {
-          icon: 'restart_alt',
+          icon: 'replay',
           title: 'ตรวจคันถัดไปได้ทันที',
-          desc: 'คลิกปุ่มเริ่มต้นตรวจคันใหม่ เพื่อกลับไป Step 1 สำหรับรถคันต่อไป'
+          desc: 'กดปุ่มเริ่มต้นใหม่เพื่อรีเซ็ตฟอร์ม และตรวจรถคันถัดไปได้อย่างต่อเนื่อง'
         }
       ],
       uiMockup: (
@@ -542,53 +572,61 @@ export const SystemManualModal: React.FC<SystemManualModalProps> = ({ isOpen, on
                 dashboard
               </span>
               <span className="font-bold text-white text-[13px]">
-                Step 3: แดชบอร์ดสรุปผลการตรวจสภาพรถ
+                Step 3: แดชบอร์ดสรุปผล ขสมก. เขต 6
               </span>
             </div>
-            <span className="px-2 py-0.5 bg-[#005c55] text-[10px] font-bold rounded">
-              ขสมก. เขต 6
+            <span className="px-2 py-0.5 bg-emerald-900/60 text-emerald-300 text-[10px] font-bold rounded">
+              🔥 Real-time Cloud
             </span>
           </div>
 
-          {/* Metric stats 3 cols */}
-          <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
-            <div className="bg-slate-800 p-2 rounded-xl border border-slate-700">
-              <span className="text-slate-400 block text-[10px]">ตรวจแล้ววันนี้</span>
-              <span className="font-bold text-[18px] text-white">48</span>
+          {/* Metric stats 4 cols */}
+          <div className="grid grid-cols-4 gap-1.5 text-center text-[10px]">
+            <div className="bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+              <span className="text-slate-400 block text-[9px]">ตรวจวันนี้</span>
+              <span className="font-bold text-[16px] text-white">48 คัน</span>
             </div>
-            <div className="bg-emerald-950/80 p-2 rounded-xl border border-emerald-600/60">
-              <span className="text-emerald-400 block text-[10px]">พร้อมบริการ</span>
-              <span className="font-bold text-[18px] text-emerald-300">46</span>
+            <div className="bg-emerald-950/80 p-1.5 rounded-xl border border-emerald-600/60">
+              <span className="text-emerald-400 block text-[9px]">พร้อมบริการ</span>
+              <span className="font-bold text-[16px] text-emerald-300">46 คัน</span>
             </div>
-            <div className="bg-red-950/80 p-2 rounded-xl border border-red-600/60">
-              <span className="text-red-400 block text-[10px]">ต้องแก้ไข</span>
-              <span className="font-bold text-[18px] text-red-300">2</span>
+            <div className="bg-red-950/80 p-1.5 rounded-xl border border-red-600/60">
+              <span className="text-red-400 block text-[9px]">ต้องแก้ไข</span>
+              <span className="font-bold text-[16px] text-red-300">2 คัน</span>
+            </div>
+            <div className="bg-blue-950/80 p-1.5 rounded-xl border border-blue-600/60">
+              <span className="text-blue-400 block text-[9px]">ความพร้อม</span>
+              <span className="font-bold text-[16px] text-blue-300">95.8%</span>
             </div>
           </div>
 
           {/* Table Mock Item */}
           <div className="bg-slate-800/90 rounded-xl p-2.5 border border-slate-700 space-y-1.5 text-[11px]">
             <div className="flex items-center justify-between text-slate-400 text-[10px]">
-              <span>ล่าสุด • 28/08/2026 08:30</span>
-              <span className="text-emerald-400 font-bold">✓ ผ่านเกณฑ์</span>
+              <span>ล่าสุด • 22/09/2026 08:30</span>
+              <span className="text-emerald-400 font-bold">✓ พร้อมบริการ 100%</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="font-bold text-white">สาย 4-59 • เลข 50010 (ISUZU)</span>
-              <span className="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-300">
+              <span className="text-[10px] bg-emerald-900/60 border border-emerald-500/50 px-2 py-0.5 rounded text-emerald-300 font-bold">
                 ดูภาพ 3 ชุด ➔
               </span>
             </div>
           </div>
 
           {/* Action Row */}
-          <div className="flex items-center gap-2 pt-1">
-            <button className="flex-1 py-2 bg-slate-800 text-slate-300 rounded-xl font-bold text-[11px] border border-slate-700 flex items-center justify-center gap-1">
-              <span className="material-symbols-outlined text-[14px]">print</span>
-              <span>พิมพ์รายงาน</span>
+          <div className="grid grid-cols-3 gap-1.5 pt-1">
+            <button className="py-2 bg-rose-700 text-white rounded-xl font-bold text-[10.5px] flex items-center justify-center gap-1 shadow-xs">
+              <span className="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+              <span>📄 รายงาน PDF</span>
             </button>
-            <button className="flex-2 py-2 bg-[#005c55] text-white rounded-xl font-bold text-[12px] flex items-center justify-center gap-1 shadow-md">
-              <span className="material-symbols-outlined text-[16px]">add_circle</span>
-              <span>เริ่มต้นตรวจคันใหม่ (Step 1)</span>
+            <button className="py-2 bg-emerald-800/80 text-emerald-200 rounded-xl font-bold text-[10.5px] border border-emerald-600/50 flex items-center justify-center gap-1">
+              <span className="material-symbols-outlined text-[14px]">chat</span>
+              <span>📋 ส่ง LINE</span>
+            </button>
+            <button className="py-2 bg-[#005c55] text-white rounded-xl font-bold text-[10.5px] flex items-center justify-center gap-1 shadow-md">
+              <span className="material-symbols-outlined text-[14px]">replay</span>
+              <span>🔄 คันถัดไป</span>
             </button>
           </div>
         </div>

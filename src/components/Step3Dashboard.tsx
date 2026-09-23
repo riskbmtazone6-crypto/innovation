@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { InspectionRecord } from '../types';
 import { updateInspectionStatus, deleteInspection } from '../firebase/config';
+import { DownloadReportModal } from './DownloadReportModal';
 
 interface Step3DashboardProps {
   records: InspectionRecord[];
@@ -22,6 +23,8 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
   const [previewPhoto, setPreviewPhoto] = useState<{ url: string; title: string } | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportInitialRecord, setReportInitialRecord] = useState<InspectionRecord | null>(null);
 
   // Compute key summary statistics
   const totalInspected = records.length;
@@ -206,6 +209,19 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => {
+              setReportInitialRecord(null);
+              setIsReportModalOpen(true);
+            }}
+            className="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white text-[13px] font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95"
+            title="ดาวน์โหลดและพิมพ์รายงานผลการตรวจสภาพรถ PDF (A4 Official Report)"
+          >
+            <span className="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+            <span>ดาวน์โหลดรายงาน (PDF)</span>
+          </button>
+
           <button
             type="button"
             onClick={handleCopyLineSummary}
@@ -658,9 +674,9 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
                   className="w-full bg-[#f8fafc] border border-[#cbd5e1] rounded-xl px-4 py-2.5 text-[14px] text-[#121b2e] appearance-none focus:outline-none focus:border-[#005c55] focus:ring-1 focus:ring-[#005c55] transition-colors cursor-pointer pr-9"
                 >
                   <option value="all">ทุกกลุ่มงาน (เขต 6)</option>
-                  <option value="6-1">กปด.16 (ปากน้ำ/เมกา)</option>
-                  <option value="6-2">กปด.26 (แพรกษา/คลองเตย)</option>
-                  <option value="6-3">กปด.36 (สายใต้/ฟาร์มจระเข้)</option>
+                  <option value="6-1">กปด.16 (อู่ไร่ขิง)</option>
+                  <option value="6-2">กปด.26 (อู่พุทธมณฑลสาย 3)</option>
+                  <option value="6-3">กปด.36 (อู่พุทธมณฑลสาย 3)</option>
                 </select>
                 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#64748b] pointer-events-none text-[20px]">
                   arrow_drop_down
@@ -747,17 +763,32 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
                               )}
                             </td>
                             <td className="px-4 py-3.5 text-right">
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedRecord(rec);
-                                }}
-                                className="text-[#005c55] hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1 text-[12px] font-bold"
-                              >
-                                <span className="material-symbols-outlined text-[16px]">visibility</span>
-                                <span>ดูผล</span>
-                              </button>
+                              <div className="flex items-center justify-end gap-1">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setReportInitialRecord(rec);
+                                    setIsReportModalOpen(true);
+                                  }}
+                                  className="text-rose-600 hover:bg-rose-50 px-2 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1 text-[12px] font-bold"
+                                  title="พิมพ์ใบตรวจสภาพรถ PDF"
+                                >
+                                  <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                                  <span className="hidden sm:inline">PDF</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedRecord(rec);
+                                  }}
+                                  className="text-[#005c55] hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1 text-[12px] font-bold"
+                                >
+                                  <span className="material-symbols-outlined text-[16px]">visibility</span>
+                                  <span>ดูผล</span>
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         );
@@ -849,7 +880,22 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
 
                     <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[12px]">
                       <span className="text-[#64748b] text-[11px]">{rec.operationGroupName}</span>
-                      <span className="text-[#005c55] font-bold">ดูรายละเอียด →</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setReportInitialRecord(rec);
+                            setIsReportModalOpen(true);
+                          }}
+                          className="text-rose-600 hover:text-rose-700 font-bold text-[11px] flex items-center gap-0.5 px-2 py-0.5 rounded hover:bg-rose-50 cursor-pointer"
+                          title="พิมพ์ใบตรวจสภาพรถ PDF"
+                        >
+                          <span className="material-symbols-outlined text-[15px]">picture_as_pdf</span>
+                          <span>PDF</span>
+                        </button>
+                        <span className="text-[#005c55] font-bold">ดูรายละเอียด →</span>
+                      </div>
                     </div>
                   </div>
                 );
@@ -1195,7 +1241,7 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-4 border-t border-[#e5e7eb] flex items-center justify-between bg-[#f8fafc]">
+            <div className="px-6 py-4 border-t border-[#e5e7eb] flex items-center justify-between bg-[#f8fafc] flex-wrap gap-2">
               {selectedRecord.id ? (
                 <button
                   type="button"
@@ -1208,13 +1254,27 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
               ) : (
                 <div></div>
               )}
-              <button
-                type="button"
-                onClick={() => setSelectedRecord(null)}
-                className="px-5 py-2 rounded-xl bg-[#005c55] text-white text-[13px] font-bold hover:bg-[#0f766e] cursor-pointer"
-              >
-                ปิดหน้าต่าง
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReportInitialRecord(selectedRecord);
+                    setIsReportModalOpen(true);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-[13px] font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95"
+                  title="พิมพ์ใบรายงานผลการตรวจสภาพรถคันนี้เป็น PDF"
+                >
+                  <span className="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                  <span>พิมพ์ใบตรวจ (PDF)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedRecord(null)}
+                  className="px-5 py-2 rounded-xl bg-[#005c55] text-white text-[13px] font-bold hover:bg-[#0f766e] cursor-pointer"
+                >
+                  ปิดหน้าต่าง
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1247,6 +1307,13 @@ export const Step3Dashboard: React.FC<Step3DashboardProps> = ({
           </div>
         </div>
       )}
+      {/* Download / Printable PDF Modal */}
+      <DownloadReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        records={filteredRecords.length > 0 ? filteredRecords : records}
+        initialRecord={reportInitialRecord}
+      />
     </div>
   );
 };

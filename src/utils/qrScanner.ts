@@ -2,29 +2,27 @@ import jsQR from 'jsqr';
 import { BMTA_DISTRICT_6_FLEET, findVehicleByBusNumber } from '../data/fleetData';
 
 export interface ParsedBusQR {
-  route: string;
-  busNumber: string;
+  route: string;       // สายเดินรถ (ดึงจากเซล B)
+  busNumber: string;   // เลขข้างรถ (ดึงจากเซล D)
   rawText: string;
-  cellB?: string;
-  cellD?: string;
-  licensePlate?: string;
-  model?: string;
+  cellB?: string;      // ข้อมูลจากเซล B (Bus line)
+  cellD?: string;      // ข้อมูลจากเซล D (busnumber)
+  licensePlate?: string;// ทะเบียนรถ (เซล E)
+  model?: string;      // รุ่นรถ (เซล C)
   sourceFormat?: string;
 }
 
-// Clean quotes, control characters (ASCII 0-31), and extra whitespace from string
+// Clean quotes, control characters (ASCII 0-31 except tab \t and newline \n \r), and extra whitespace
 function cleanCellValue(val: string | undefined | null): string {
   if (!val) return '';
   return String(val)
-    // Remove control characters (except newline \n for multiline check)
-    .replace(/[\x00-\x09\x0B-\x1F\x7F]/g, '')
-    // Remove non-printable / escape sequences like \x1B-.91
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
     .replace(/^\x1B-[.]?/, '')
-    .replace(/^["']|["']$/g, '') // remove outer quotes
+    .replace(/^["']|["']$/g, '')
     .trim();
 }
 
-// Sanitize route strings (e.g. normalizing 91 to 91ก if applicable)
+// Sanitize route strings (e.g. normalizing 91 / -.91 to 91ก if applicable)
 function sanitizeRoute(route: string, busNumber?: string): string {
   if (!route) {
     if (busNumber) {
@@ -34,14 +32,25 @@ function sanitizeRoute(route: string, busNumber?: string): string {
     return '';
   }
   let r = route.trim();
-  // Clean corrupt prefix from raw terminal/barcode esc bytes
   r = r.replace(/^[^0-9A-Za-zก-๙]+/, '').replace(/[^0-9A-Za-zก-๙\-]+$/, '');
   
-  // Normalization for Thai route designations like 91ก
-  if (r === '91' || r === '91' || r === '-.91' || r.startsWith('91')) {
+  // Normalization for Thai route 91ก (District 6)
+  if (r === '91' || r === '-.91' || r === '91' || r === ' -.91' || r.startsWith('91')) {
     return '91ก';
   }
   return r;
+}
+
+// Unescape Excel JSON export (e.g. "{""Bus line"":""4-59""}")
+function unescapeExcelJson(raw: string): string {
+  let text = raw.trim();
+  if (text.startsWith('"') && text.endsWith('"')) {
+    const inner = text.slice(1, -1);
+    if (inner.includes('""')) {
+      text = inner.replace(/""/g, '"');
+    }
+  }
+  return text;
 }
 
 export function parseBusQRText(text: string): ParsedBusQR {
@@ -50,13 +59,162 @@ export function parseBusQRText(text: string): ParsedBusQR {
   }
 
   const rawClean = text.trim();
-  // Strip control chars except newline
-  const clean = rawClean.replace(/[\x00-\x09\x0B-\x1F\x7F]/g, '').trim();
+  // Strip control chars except tab (\t = 0x09), line feed (\n = 0x0A), carriage return (\r = 0x0D)
+  const clean = rawClean.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim();
 
   // =========================================================================
-  // 1. BMTA District 6 QR Payload Format:
-  //    "*2\"#\x16 (Bus line): 4-59\n@%\x02\x02I2\x07#\x16 (Bus number): 50010"
-  //    or "(Bus line): 4-59 \n (Bus number): 50010"
+  // 1. JSON PAYLOAD FORMAT (Column F from databusnumber.xlsx):
+  //    {"Bus line":"4-59","model":"ISUZU","busnumber":"50010","License plate":"11-8991"}
+  //    or "{""Bus line"":""4-59"",""model"":""ISUZU"",""busnumber"":""50010""}"
+  //    ดึงสายเดินรถจากเซล B (key: "Bus line") และเลขข้างรถจากเซล D (key: "busnumber")
+  // =========================================================================
+  try {
+    const jsonCandidate = unescapeExcelJson(clean);
+    if (jsonCandidate.startsWith('{') && jsonCandidate.endsWith('}')) {
+      const json = JSON.parse(jsonCandidate);
+      if (typeof json === 'object' && json !== null) {
+        // ดึงสายเดินรถจากเซล B
+        const rawRoute = cleanCellValue(
+          json['Bus line'] || json['Bus Line'] || json['bus line'] || json.busline || json.busLine ||
+          json.B || json.b || json.cellB || json.cell_b || json['Cell B'] || json['เซลB'] || json['เซล B'] ||
+          json.route || json.busRoute || json.line || ''
+        );
+
+        // ดึงเลขข้างรถจากเซล D
+        const rawBusNumber = cleanCellValue(
+          json.busnumber || json['bus number'] || json['Bus number'] || json['Bus Number'] ||
+          json.busNumber || json.busNo || json.vehicleNo ||
+          json.D || json.d || json.cellD || json.cell_d || json['Cell D'] || json['เซลD'] || json['เซล D'] || ''
+        );
+
+        const fleetVehicle = findVehicleByBusNumber(rawBusNumber);
+        const finalRoute = sanitizeRoute(rawRoute || fleetVehicle?.route || '', rawBusNumber) || fleetVehicle?.route || '';
+        const finalBusNumber = rawBusNumber || fleetVehicle?.busNumber || '';
+
+        if (finalRoute || finalBusNumber) {
+          return {
+            route: finalRoute,
+            busNumber: finalBusNumber,
+            cellB: finalRoute,
+            cellD: finalBusNumber,
+            licensePlate: json['License plate'] || json.licensePlate || fleetVehicle?.licensePlate,
+            model: json.model || fleetVehicle?.model,
+            rawText: rawClean,
+            sourceFormat: `JSON QR Payload (เซล B: ${finalRoute}, เซล D: ${finalBusNumber})`
+          };
+        }
+      }
+    }
+  } catch (e) {
+    // Continue to other parsers
+  }
+
+  // =========================================================================
+  // 2. EXPLICIT CELL LABELS: e.g. "เซล B: 4-43, เซล D: 55001" or "Cell B: 4-59, Cell D: 50010"
+  // =========================================================================
+  const cellBMatch = clean.match(/(?:(?:เซล|cell|col|column|ช่อง)\s*b|b)\s*[:=\s]\s*([0-9A-Za-z\-ก-๙\.]+)/i);
+  const cellDMatch = clean.match(/(?:(?:เซล|cell|col|column|ช่อง)\s*d|d)\s*[:=\s]\s*([0-9A-Za-z\-]+)/i);
+  if (cellBMatch && cellDMatch) {
+    const rawRoute = cleanCellValue(cellBMatch[1]);
+    const rawBus = cleanCellValue(cellDMatch[1]);
+    const fleetVehicle = findVehicleByBusNumber(rawBus);
+
+    const finalRoute = sanitizeRoute(rawRoute || fleetVehicle?.route || '', rawBus) || fleetVehicle?.route || '';
+    const finalBusNumber = rawBus || fleetVehicle?.busNumber || '';
+
+    return {
+      route: finalRoute,
+      busNumber: finalBusNumber,
+      cellB: finalRoute,
+      cellD: finalBusNumber,
+      licensePlate: fleetVehicle?.licensePlate,
+      model: fleetVehicle?.model,
+      rawText: rawClean,
+      sourceFormat: `ระบุเซลตรงกัน (สายเดินรถจากเซล B: ${finalRoute}, เลขข้างรถจากเซล D: ${finalBusNumber})`
+    };
+  }
+
+  // =========================================================================
+  // 3. SPREADSHEET ROW (Tab, Pipe, Semicolon, or Comma separated):
+  //    No. (Col A) | Bus line (Col B) | model (Col C) | busnumber (Col D) | License plate (Col E)
+  //    ตัวอย่าง: 1\t4-59\tISUZU\t50010\t11-8991
+  // =========================================================================
+  const delimiterMatch = clean.includes('\t') ? '\t'
+    : clean.includes('|') ? '|'
+    : clean.includes(';') ? ';'
+    : clean.includes(',') && !clean.includes('เซล') ? ',' : null;
+
+  if (delimiterMatch) {
+    const rowParts = clean.split(delimiterMatch).map(cleanCellValue);
+    if (rowParts.length >= 4) {
+      // คอลัมน์ที่ 2 (index 1) = เซล B คือสายเดินรถ
+      // คอลัมน์ที่ 4 (index 3) = เซล D คือเลขข้างรถ
+      const routeCandidate = sanitizeRoute(rowParts[1]);
+      const busCandidate = cleanCellValue(rowParts[3]);
+      const fleetVehicle = findVehicleByBusNumber(busCandidate);
+
+      const finalRoute = routeCandidate || fleetVehicle?.route || '';
+      const finalBusNumber = busCandidate || fleetVehicle?.busNumber || '';
+
+      return {
+        route: finalRoute,
+        busNumber: finalBusNumber,
+        cellB: finalRoute,
+        cellD: finalBusNumber,
+        licensePlate: rowParts[4] || fleetVehicle?.licensePlate,
+        model: rowParts[2] || fleetVehicle?.model,
+        rawText: rawClean,
+        sourceFormat: `สเปรดชีต (สายเดินรถจากเซล B: ${finalRoute}, เลขข้างรถจากเซล D: ${finalBusNumber})`
+      };
+    } else if (rowParts.length >= 2) {
+      // 2 คอลัมน์: Col 0 = เซล B (สายเดินรถ), Col 1 = เซล D (เลขข้างรถ)
+      const routeCandidate = sanitizeRoute(rowParts[0]);
+      const busCandidate = cleanCellValue(rowParts[1]);
+      const fleetVehicle = findVehicleByBusNumber(busCandidate);
+
+      const finalRoute = routeCandidate || fleetVehicle?.route || '';
+      const finalBusNumber = busCandidate || fleetVehicle?.busNumber || '';
+
+      return {
+        route: finalRoute,
+        busNumber: finalBusNumber,
+        cellB: finalRoute,
+        cellD: finalBusNumber,
+        licensePlate: fleetVehicle?.licensePlate,
+        model: fleetVehicle?.model,
+        rawText: rawClean,
+        sourceFormat: `ดึงข้อมูลสำเร็จ (เซล B: ${finalRoute}, เซล D: ${finalBusNumber})`
+      };
+    }
+  }
+
+  // =========================================================================
+  // 4. MULTILINE TEXT: 4+ lines representing Cell A, Cell B, Cell C, Cell D
+  // =========================================================================
+  const lines = clean.split(/\r?\n/).map(cleanCellValue).filter((l) => l.length > 0);
+  if (lines.length >= 4) {
+    const route = sanitizeRoute(lines[1]);       // Line 2 = เซล B
+    const busNumber = cleanCellValue(lines[3]);   // Line 4 = เซล D
+    const fleetVehicle = findVehicleByBusNumber(busNumber);
+
+    const finalRoute = route || fleetVehicle?.route || '';
+    const finalBusNumber = busNumber || fleetVehicle?.busNumber || '';
+
+    return {
+      route: finalRoute,
+      busNumber: finalBusNumber,
+      cellB: finalRoute,
+      cellD: finalBusNumber,
+      licensePlate: lines[4] || fleetVehicle?.licensePlate,
+      model: lines[2] || fleetVehicle?.model,
+      rawText: rawClean,
+      sourceFormat: `Multiline Cells (Line 2: เซล B [${finalRoute}], Line 4: เซล D [${finalBusNumber}])`
+    };
+  }
+
+  // =========================================================================
+  // 5. BMTA DISTRICT 6 TEXT PAYLOAD FORMAT:
+  //    (Bus line): 4-59 \n (Bus number): 50010
   // =========================================================================
   const busLineMatch = clean.match(/\(?\s*Bus\s*line\s*\)?\s*[:=\-]?\s*([0-9A-Za-z\-ก-๙\.]+)/i);
   const busNoMatch = clean.match(/\(?\s*Bus\s*number\s*\)?\s*[:=\-]?\s*([0-9A-Za-z\-]+)/i);
@@ -65,7 +223,6 @@ export function parseBusQRText(text: string): ParsedBusQR {
     const rawBusNumber = cleanCellValue(busNoMatch ? busNoMatch[1] : '');
     const rawRoute = cleanCellValue(busLineMatch ? busLineMatch[1] : '');
     
-    // Cross reference fleet registry to ensure 100% accuracy
     const fleetVehicle = findVehicleByBusNumber(rawBusNumber);
     const finalRoute = sanitizeRoute(rawRoute || fleetVehicle?.route || '', rawBusNumber) || fleetVehicle?.route || '';
     const finalBusNumber = rawBusNumber || fleetVehicle?.busNumber || '';
@@ -78,199 +235,52 @@ export function parseBusQRText(text: string): ParsedBusQR {
       licensePlate: fleetVehicle?.licensePlate,
       model: fleetVehicle?.model,
       rawText: rawClean,
-      sourceFormat: 'ดึงจาก QR Code (เซล B: Bus line, เซล D: Bus number)'
+      sourceFormat: `ดึงจาก QR Code (เซล B: ${finalRoute}, เซล D: ${finalBusNumber})`
     };
   }
 
   // =========================================================================
-  // 2. Spreadsheet Row: Tab, Comma, Semicolon, or Pipe separated
-  //    Cell A: No., Cell B: Bus line, Cell C: Model, Cell D: Bus number, Cell E: License plate
-  // =========================================================================
-  const delimiterMatch = clean.includes('\t') ? '\t'
-    : clean.includes(';') ? ';'
-    : clean.includes('|') ? '|'
-    : clean.includes(',') ? ',' : null;
-
-  if (delimiterMatch) {
-    const rowParts = clean.split(delimiterMatch).map(cleanCellValue);
-    if (rowParts.length >= 4) {
-      // Cell B = index 1 (สายเดินรถ), Cell D = index 3 (เลขข้างรถ)
-      const route = sanitizeRoute(rowParts[1]);
-      const busNumber = cleanCellValue(rowParts[3]);
-      const fleetVehicle = findVehicleByBusNumber(busNumber);
-
-      return {
-        route: route || fleetVehicle?.route || '',
-        busNumber: busNumber || fleetVehicle?.busNumber || '',
-        cellB: route || fleetVehicle?.route || '',
-        cellD: busNumber || fleetVehicle?.busNumber || '',
-        licensePlate: rowParts[4] || fleetVehicle?.licensePlate,
-        model: rowParts[2] || fleetVehicle?.model,
-        rawText: rawClean,
-        sourceFormat: `สเปรดชีต (สายเดินรถจากเซล B: ${route || '-'}, เลขข้างรถจากเซล D: ${busNumber || '-'})`
-      };
-    } else if (rowParts.length >= 2) {
-      const route = sanitizeRoute(rowParts[0]);
-      const busNumber = cleanCellValue(rowParts[1]);
-      return {
-        route,
-        busNumber,
-        cellB: route,
-        cellD: busNumber,
-        rawText: rawClean,
-        sourceFormat: `ดึงข้อมูลสำเร็จ (เซล B: ${route}, เซล D: ${busNumber})`
-      };
-    }
-  }
-
-  // =========================================================================
-  // 4. Multiline text: 4+ lines representing Cell A, Cell B, Cell C, Cell D
-  // =========================================================================
-  const lines = clean.split(/\r?\n/).map(cleanCellValue).filter((l) => l.length > 0);
-  if (lines.length >= 4) {
-    const route = sanitizeRoute(lines[1]); // Line 2 = Cell B
-    const busNumber = cleanCellValue(lines[3]); // Line 4 = Cell D
-    const fleetVehicle = findVehicleByBusNumber(busNumber);
-
-    return {
-      route: route || fleetVehicle?.route || '',
-      busNumber,
-      cellB: route,
-      cellD: busNumber,
-      licensePlate: lines[4] || fleetVehicle?.licensePlate,
-      model: lines[2] || fleetVehicle?.model,
-      rawText: rawClean,
-      sourceFormat: 'Multiline Cells (Line 2: เซล B, Line 4: เซล D)'
-    };
-  }
-
-  // =========================================================================
-  // 5. JSON format: {"B":"4-59", "D":"50010"} or {"Bus line":"4-59", "busnumber":"50010"}
-  // =========================================================================
-  try {
-    const json = JSON.parse(clean);
-    if (Array.isArray(json)) {
-      if (json.length >= 4) {
-        const route = sanitizeRoute(cleanCellValue(json[1]));
-        const busNumber = cleanCellValue(json[3]);
-        return {
-          route,
-          busNumber,
-          cellB: route,
-          cellD: busNumber,
-          rawText: rawClean,
-          sourceFormat: 'JSON Row Array (Cell B & Cell D)'
-        };
-      }
-    } else if (typeof json === 'object' && json !== null) {
-      const route = sanitizeRoute(
-        cleanCellValue(
-          json.B || json.b || json.cellB || json.cell_b || json['Cell B'] || json['เซลB'] || json['เซล B'] ||
-          json['Bus line'] || json['busLine'] || json.route || json.busRoute || json.line || ''
-        )
-      );
-
-      const busNumber = cleanCellValue(
-        json.D || json.d || json.cellD || json.cell_d || json['Cell D'] || json['เซลD'] || json['เซล D'] ||
-        json.busnumber || json['Bus number'] || json.busNumber || json.busNo || json.vehicleNo || ''
-      );
-
-      if (route || busNumber) {
-        const fleetVehicle = findVehicleByBusNumber(busNumber);
-        return {
-          route: route || fleetVehicle?.route || '',
-          busNumber: busNumber || fleetVehicle?.busNumber || '',
-          cellB: route,
-          cellD: busNumber,
-          licensePlate: json['License plate'] || json.licensePlate || fleetVehicle?.licensePlate,
-          model: json.model || fleetVehicle?.model,
-          rawText: rawClean,
-          sourceFormat: 'JSON Object (Cell B & Cell D)'
-        };
-      }
-    }
-  } catch (e) {
-    // Not valid JSON
-  }
-
-  // =========================================================================
-  // 6. Explicit Cell key-value syntax: e.g. "B: 4-59, D: 50010" or "เซล B 4-59 เซล D 50010"
-  // =========================================================================
-  const cellBMatch = clean.match(/(?:(?:เซล|cell|col|column|ช่อง)\s*b|b)\s*[:=\s]\s*([0-9A-Za-z\-ก-๙\.]+)/i);
-  const cellDMatch = clean.match(/(?:(?:เซล|cell|col|column|ช่อง)\s*d|d)\s*[:=\s]\s*([0-9A-Za-z\-]+)/i);
-  if (cellBMatch && cellDMatch) {
-    const route = sanitizeRoute(cleanCellValue(cellBMatch[1]));
-    const busNumber = cleanCellValue(cellDMatch[1]);
-    const fleetVehicle = findVehicleByBusNumber(busNumber);
-
-    return {
-      route: route || fleetVehicle?.route || '',
-      busNumber: busNumber || fleetVehicle?.busNumber || '',
-      cellB: route || fleetVehicle?.route || '',
-      cellD: busNumber || fleetVehicle?.busNumber || '',
-      licensePlate: fleetVehicle?.licensePlate,
-      model: fleetVehicle?.model,
-      rawText: rawClean,
-      sourceFormat: `ระบุเซลตรงกัน (สายเดินรถจากเซล B: ${route}, เลขข้างรถจากเซล D: ${busNumber})`
-    };
-  }
-
-  // =========================================================================
-  // 7. Thai Natural Text (e.g. "สาย 4-59 เลข 50010" หรือ "สาย 515 เบอร์ 56070")
+  // 6. THAI NATURAL TEXT (e.g. "สาย 4-59 เลข 50010" หรือ "สาย 515 เบอร์ 56070")
   // =========================================================================
   const thaiMatch = clean.match(/สาย\s*([0-9A-Za-z\-ก-๙]+).*?(?:เลข|เบอร์|คันที่|ข้างรถ)?\s*([0-9]+-[0-9]+|[0-9]{4,6})/);
   if (thaiMatch) {
     const route = sanitizeRoute(thaiMatch[1].trim());
     const busNumber = thaiMatch[2].trim();
     const fleetVehicle = findVehicleByBusNumber(busNumber);
+
+    const finalRoute = route || fleetVehicle?.route || '';
+    const finalBusNumber = busNumber || fleetVehicle?.busNumber || '';
+
     return {
-      route: route || fleetVehicle?.route || '',
-      busNumber,
-      cellB: route,
-      cellD: busNumber,
+      route: finalRoute,
+      busNumber: finalBusNumber,
+      cellB: finalRoute,
+      cellD: finalBusNumber,
       licensePlate: fleetVehicle?.licensePlate,
       model: fleetVehicle?.model,
       rawText: rawClean,
-      sourceFormat: 'Thai Text Match'
+      sourceFormat: `ข้อความภาษาไทย (เซล B: ${finalRoute}, เซล D: ${finalBusNumber})`
     };
   }
 
   // =========================================================================
-  // 8. Delimited formats with 2 parts: "4-59/50010", "4-59:50010"
+  // 7. LOOKUP BY 5-DIGIT BUS NUMBER IN 326 FLEET REGISTRY
+  //    (ค้นหาจากเลขข้างรถ 5 หลัก เช่น 50010, 56070, 55001 ในฐานข้อมูล 326 คัน)
+  //    เมื่อพบ จะดึงเซล B (สายเดินรถ) และเซล D (เลขข้างรถ) มาให้ครบถ้วน 100%
   // =========================================================================
-  const splitDelim = clean.split(/[/:]+/).map(cleanCellValue);
-  if (splitDelim.length >= 2) {
-    const r = sanitizeRoute(splitDelim[0]);
-    const b = splitDelim.slice(1).join('-').trim();
-    if (r && b) {
-      const fleetVehicle = findVehicleByBusNumber(b);
-      return {
-        route: r || fleetVehicle?.route || '',
-        busNumber: b,
-        cellB: r,
-        cellD: b,
-        licensePlate: fleetVehicle?.licensePlate,
-        model: fleetVehicle?.model,
-        rawText: rawClean,
-        sourceFormat: 'Delimiter / or :'
-      };
-    }
-  }
-
-  // =========================================================================
-  // 9. Single 5-digit bus number lookup (e.g. "50010" or "6-56018")
-  // =========================================================================
-  const directBus = findVehicleByBusNumber(clean);
+  const busNumExtract = clean.match(/\b(6-\d{5}|\d{5})\b/);
+  const busTarget = busNumExtract ? busNumExtract[1] : clean;
+  const directBus = findVehicleByBusNumber(busTarget);
   if (directBus) {
     return {
       route: directBus.route,
       busNumber: directBus.busNumber,
-      cellB: directBus.route,
-      cellD: directBus.busNumber,
+      cellB: directBus.cellB || directBus.route,
+      cellD: directBus.cellD || directBus.busNumber,
       licensePlate: directBus.licensePlate,
       model: directBus.model,
       rawText: rawClean,
-      sourceFormat: `Fleet Registry Matched (#${directBus.no})`
+      sourceFormat: `ฐานข้อมูล ขสมก. เขต 6 (ลำดับที่ ${directBus.no} | เซล B: ${directBus.route} | เซล D: ${directBus.busNumber})`
     };
   }
 
@@ -278,8 +288,10 @@ export function parseBusQRText(text: string): ParsedBusQR {
   return {
     route: sanitizeRoute(clean),
     busNumber: '',
+    cellB: sanitizeRoute(clean),
+    cellD: '',
     rawText: rawClean,
-    sourceFormat: 'Single Value'
+    sourceFormat: 'ไม่สามารถระบุเลขข้างรถได้'
   };
 }
 

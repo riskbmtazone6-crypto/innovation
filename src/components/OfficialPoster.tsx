@@ -230,38 +230,38 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                       <span className="w-6 h-6 rounded-full bg-[#005c55] text-white font-black text-[12px] flex items-center justify-center shadow-xs shrink-0">
                         1
                       </span>
-                      <h3 className="font-extrabold text-[13px] text-[#002f6c]">เข้าสู่ระบบ</h3>
+                      <h3 className="font-extrabold text-[13px] text-[#002f6c]">ระบุตัวตนผู้ตรวจ & สังกัด</h3>
                     </div>
                     <p className="text-[11px] text-slate-600 leading-tight">
-                      กรอกเลขประจำตัวพนักงาน ระบบจะแสดงชื่อ-นามสกุล โดยอัตโนมัติ
+                      กรอกเลขประจำตัวพนักงาน (ID) ระบบจะแสดงชื่อ-นามสกุล และเลือกกลุ่มงาน (กปด.)
                     </p>
 
                     {/* Phone Mockup 1 */}
                     <div className="bg-slate-900 text-white p-2.5 rounded-xl text-[10px] space-y-1.5 shadow-inner mt-2 border border-slate-700">
                       <div className="text-center font-bold text-slate-300 pb-1 border-b border-slate-700 text-[10px] flex items-center justify-center gap-1">
-                        <span className="material-symbols-outlined text-[13px] text-emerald-400">lock</span>
-                        <span>เข้าสู่ระบบ</span>
+                        <span className="material-symbols-outlined text-[13px] text-emerald-400">badge</span>
+                        <span>1. ข้อมูลผู้ตรวจสอบ & สังกัด</span>
                       </div>
                       <div className="bg-slate-800 p-1.5 rounded-lg border border-slate-600">
-                        <span className="text-slate-400 block text-[8.5px]">เลขประจำตัวพนักงาน:</span>
-                        <span className="font-bold text-emerald-400 text-[11px]">123456</span>
+                        <span className="text-slate-400 block text-[8.5px]">เลขประจำตัวพนักงาน (ID):</span>
+                        <span className="font-bold text-emerald-400 text-[11px]">60124</span>
                       </div>
                       <div className="bg-slate-800 p-1.5 rounded-lg border border-slate-600">
-                        <span className="text-slate-400 block text-[8.5px]">ชื่อ-นามสกุล:</span>
-                        <span className="font-bold text-white text-[10.5px]">สมชาย ใจดี</span>
+                        <span className="text-slate-400 block text-[8.5px]">ชื่อ-นามสกุล (ผู้ตรวจ):</span>
+                        <span className="font-bold text-white text-[10.5px]">นายสมศักดิ์ ขสมก.</span>
                       </div>
                       <div className="bg-slate-800 p-1.5 rounded-lg border border-slate-600">
-                        <span className="text-slate-400 block text-[8.5px]">หน่วยงาน/ศูนย์เดินรถ:</span>
-                        <span className="font-bold text-amber-300 text-[10px]">กปด. 16</span>
+                        <span className="text-slate-400 block text-[8.5px]">สังกัดกลุ่มงานปฏิบัติการ:</span>
+                        <span className="font-bold text-amber-300 text-[10px]">กปด.36 (อู่ไร่ขิง)</span>
                       </div>
-                      <div className="bg-[#005c55] text-white text-center py-1.5 rounded-lg font-bold text-[9.5px] shadow-xs">
-                        เข้าสู่ระบบ
+                      <div className="bg-emerald-800/80 text-emerald-200 text-center py-1 rounded-lg font-bold text-[9px]">
+                        ✓ ยืนยันข้อมูลผู้ตรวจเรียบร้อย
                       </div>
                     </div>
                   </div>
                   <div className="mt-2.5 bg-blue-50 border border-blue-200 rounded-lg p-1.5 text-[9.5px] text-blue-900 flex items-center gap-1 font-semibold">
                     <span className="material-symbols-outlined text-[14px] text-blue-700">info</span>
-                    <span>หากข้อมูลไม่ครบถ้วน ระบบจะแจ้งเตือน</span>
+                    <span>ระบบจำชื่อและรหัสผู้ตรวจอัตโนมัติ</span>
                   </div>
                 </div>
 
@@ -273,52 +273,48 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                         2
                       </span>
                       <h3 className="font-extrabold text-[13px] text-[#002f6c]">
-                        ข้อมูลรถโดยสาร (สแกน QR Code)
+                        สแกน QR Code ประจำรถ
                       </h3>
                     </div>
                     <p className="text-[11px] text-slate-600 leading-tight">
-                      กดปุ่มสแกน QR Code ที่ตัวรถ เพื่อดึงข้อมูลรถโดยสาร
+                      สแกน QR Code หน้ารถ เพื่อดึงสายเดินรถ (เซล B) และเลขข้างรถ (เซล D) อัตโนมัติ
                     </p>
 
                     {/* Phone Mockup 2 */}
                     <div className="bg-slate-900 text-white p-2.5 rounded-xl text-[10px] space-y-1.5 shadow-inner mt-2 border border-slate-700">
                       <div className="text-center font-bold text-slate-300 pb-1 border-b border-slate-700 text-[10px] flex items-center justify-center gap-1">
                         <span className="material-symbols-outlined text-[13px] text-emerald-400">qr_code_scanner</span>
-                        <span>สแกน QR Code</span>
+                        <span>สแกน QR ประจำรถ 326 คัน</span>
                       </div>
                       <div className="h-16 bg-black rounded-lg border border-emerald-500/60 flex items-center justify-center relative overflow-hidden">
                         <span className="material-symbols-outlined text-emerald-400 text-[28px] animate-pulse">
                           qr_code_2
                         </span>
+                        <div className="absolute inset-x-0 h-0.5 bg-emerald-400 shadow-[0_0_8px_#34d399]"></div>
                         <span className="absolute bottom-0.5 text-[8px] text-white bg-black/80 px-1.5 py-0.2 rounded font-medium">
-                          สแกนที่ป้าย QR Code บริเวณตัวรถ
+                          ดึงเซล B (สาย) & เซล D (เลขข้างรถ)
                         </span>
                       </div>
                       <div className="bg-emerald-950/90 p-1.5 rounded-lg border border-emerald-600 text-[9px] space-y-0.5">
                         <div className="flex justify-between">
-                          <span className="text-slate-300">สายเดินรถ:</span>
-                          <span className="font-bold text-emerald-400">-</span>
+                          <span className="text-slate-300">สายเดินรถ (เซล B):</span>
+                          <span className="font-bold text-emerald-300 text-[10px]">สาย 4-59</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-300">เลขเข้ารถ:</span>
-                          <span className="font-bold text-emerald-400">6-55120</span>
+                          <span className="text-slate-300">เลขข้างรถ (เซล D):</span>
+                          <span className="font-bold text-emerald-300 text-[10px]">50010</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-300">ยี่ห้อรถ:</span>
-                          <span className="font-bold text-white">MITSUBISHI</span>
+                          <span className="text-slate-300">ยี่ห้อ / รุ่นรถ (เซล C):</span>
+                          <span className="font-bold text-white">ISUZU</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-300">หมายเลขติดตัวรถ:</span>
-                          <span className="font-bold text-amber-300">12-3456</span>
+                          <span className="text-slate-300">ทะเบียนรถ (เซล E):</span>
+                          <span className="font-bold text-amber-300">11-8991</span>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-1 pt-0.5">
-                        <div className="bg-emerald-700 text-white text-center py-1 rounded-md font-bold text-[8.5px]">
-                          ยืนยันข้อมูล
-                        </div>
-                        <div className="bg-slate-700 text-slate-200 text-center py-1 rounded-md font-bold text-[8.5px]">
-                          แก้ไขข้อมูล
-                        </div>
+                      <div className="bg-[#005c55] text-white text-center py-1 rounded-md font-bold text-[8.5px]">
+                        เริ่มต้นตรวจสอบสภาพรถ (ไปขั้นตอนที่ 2) →
                       </div>
                     </div>
                   </div>
@@ -326,7 +322,7 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                     <span className="material-symbols-outlined text-[14px] text-emerald-700">
                       check_circle
                     </span>
-                    <span>ตรวจสอบข้อมูลถูกต้อง กดเลือก ยืนยันข้อมูล</span>
+                    <span>สแกนปุ๊บ ข้อมูลเข้าฟอร์มครบ 100%</span>
                   </div>
                 </div>
 
@@ -337,40 +333,43 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                       <span className="w-6 h-6 rounded-full bg-[#005c55] text-white font-black text-[12px] flex items-center justify-center shadow-xs shrink-0">
                         3
                       </span>
-                      <h3 className="font-extrabold text-[13px] text-[#002f6c]">ระบุรายละเอียดเพิ่มเติม</h3>
+                      <h3 className="font-extrabold text-[13px] text-[#002f6c]">ตรวจชุดที่ 1: ภายนอกตัวรถ</h3>
                     </div>
                     <p className="text-[11px] text-slate-600 leading-tight">
-                      ยืนยันข้อมูล / กรอกเพิ่มเติม แล้วกด “ต่อไป”
+                      ถ่ายภาพหลักฐาน 1 ภาพ พร้อมตรวจ 4 รายการ (ตัวถัง สี ยาง ไฟ ป้ายสาย)
                     </p>
 
                     {/* Phone Mockup 3 */}
                     <div className="bg-slate-900 text-white p-2.5 rounded-xl text-[10px] space-y-1.5 shadow-inner mt-2 border border-slate-700">
-                      <div className="text-center font-bold text-slate-300 pb-1 border-b border-slate-700 text-[10px] flex items-center justify-center gap-1">
-                        <span className="material-symbols-outlined text-[13px] text-amber-400">edit_note</span>
-                        <span>รายละเอียดการตรวจ</span>
+                      <div className="flex items-center justify-between border-b border-slate-700 pb-1">
+                        <span className="font-bold text-emerald-400 text-[10px]">ชุดที่ 1: ภายนอกตัวรถ</span>
+                        <span className="bg-emerald-900/60 text-emerald-300 px-1.5 py-0.2 rounded text-[8px] font-bold">
+                          ✓ ผ่านทั้งหมด
+                        </span>
                       </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg border border-slate-600">
-                        <span className="text-slate-400 block text-[8.5px]">กลุ่มงานปฏิบัติการเดินรถ:</span>
-                        <span className="font-bold text-amber-300 text-[10px]">กปด.16</span>
+                      <div className="h-14 bg-slate-800 rounded-lg flex items-center justify-center text-[8.5px] text-slate-300 border border-emerald-500/50 relative overflow-hidden">
+                        <span className="material-symbols-outlined text-[20px] text-emerald-400">directions_bus</span>
+                        <span className="absolute bottom-0 inset-x-0 bg-black/80 text-[7px] text-center text-emerald-300 py-0.5">
+                          📷 ภาพถ่ายยืนยันภายนอก (ประทับลายน้ำแล้ว)
+                        </span>
                       </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg border border-slate-600">
-                        <span className="text-slate-400 block text-[8.5px]">วันที่ / เวลา:</span>
-                        <span className="font-bold text-emerald-400 text-[10px]">26/08/2569 07:45</span>
-                      </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg border border-slate-600">
-                        <span className="text-slate-400 block text-[8.5px]">ผู้ตรวจสอบ:</span>
-                        <span className="font-bold text-white text-[10px]">สมชาย ใจดี</span>
-                      </div>
-                      <div className="bg-[#005c55] text-white text-center py-1.5 rounded-lg font-bold text-[9.5px] shadow-xs">
-                        ต่อไป
+                      <div className="space-y-0.5 text-[8.5px]">
+                        <div className="flex justify-between bg-slate-800 p-1 rounded">
+                          <span>1. สภาพตัวถัง สี และความสะอาด</span>
+                          <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
+                        </div>
+                        <div className="flex justify-between bg-slate-800 p-1 rounded">
+                          <span>2. ไฟส่องสว่าง & ยางรถยนต์</span>
+                          <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div className="mt-2.5 bg-slate-100 border border-slate-300 rounded-lg p-1.5 text-[9.5px] text-slate-700 flex items-center gap-1 font-semibold">
                     <span className="material-symbols-outlined text-[14px] text-slate-600">
-                      arrow_forward
+                      photo_camera
                     </span>
-                    <span>บันทึกสังกัดและเวลาเริ่มต้นตรวจ</span>
+                    <span>มีปุ่ม "✓ ผ่านทั้งหมดในชุดนี้" กดครั้งเดียว</span>
                   </div>
                 </div>
               </div>
@@ -384,30 +383,40 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                       <span className="w-6 h-6 rounded-full bg-[#005c55] text-white font-black text-[12px] flex items-center justify-center shadow-xs shrink-0">
                         4
                       </span>
-                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">รายการตรวจสอบ</h3>
+                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">ตรวจชุดที่ 2: ในห้องโดยสาร</h3>
                     </div>
                     <p className="text-[10.5px] text-slate-600 leading-tight">
-                      เลือกหมวดการตรวจสอบ เพื่อทำการตรวจสอบในแต่ละหมวด
+                      ถ่ายภาพภายใน 1 ภาพ เช็คเบาะ ประตู CCTV แอร์ ถังดับเพลิง
                     </p>
 
                     {/* Phone Mockup 4 */}
                     <div className="bg-slate-900 text-white p-2 rounded-xl text-[9.5px] space-y-1.5 shadow-inner mt-1 border border-slate-700">
-                      <div className="bg-slate-800 p-1.5 rounded-lg border border-blue-500/50 flex items-center justify-between">
-                        <span className="font-bold text-blue-300">หมวดที่ 1 ความปลอดภัย</span>
-                        <span className="text-[8.5px] text-slate-400 font-bold">(10 / 15)</span>
+                      <div className="flex items-center justify-between border-b border-slate-700 pb-1">
+                        <span className="font-bold text-emerald-400 text-[9.5px]">ชุดที่ 2: ในห้องโดยสาร</span>
+                        <span className="bg-emerald-900/60 text-emerald-300 px-1 py-0.2 rounded text-[7.5px] font-bold">
+                          ✓ ผ่านครบ
+                        </span>
                       </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg border border-emerald-500/50 flex items-center justify-between">
-                        <span className="font-bold text-emerald-300">หมวดที่ 2 สมรรถนะเครื่อง</span>
-                        <span className="text-[8.5px] text-slate-400 font-bold">(0 / 4)</span>
+                      <div className="h-12 bg-slate-800 rounded-lg flex items-center justify-center text-[8px] text-slate-300 border border-emerald-500/40 relative">
+                        <span className="material-symbols-outlined text-[18px] text-emerald-400">airline_seat_recline_extra</span>
+                        <span className="absolute bottom-0 inset-x-0 bg-black/80 text-[7px] text-center text-emerald-300 py-0.5">
+                          📷 ภาพห้องโดยสาร & อุปกรณ์ฉุกเฉิน
+                        </span>
                       </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg border border-amber-500/50 flex items-center justify-between">
-                        <span className="font-bold text-amber-300">หมวดที่ 3 ระบบอำนวยความสะดวก</span>
-                        <span className="text-[8.5px] text-slate-400 font-bold">(0 / 5)</span>
+                      <div className="space-y-0.5 text-[8px]">
+                        <div className="flex justify-between bg-slate-800 p-0.8 rounded">
+                          <span>เบาะนั่ง ราวจับ ประตู</span>
+                          <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
+                        </div>
+                        <div className="flex justify-between bg-slate-800 p-0.8 rounded">
+                          <span>CCTV แอร์ ค้อน/ถังดับเพลิง</span>
+                          <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <span className="text-[9.5px] text-slate-500 font-bold mt-2 block">
-                    รายการทั้งหมด 15 รายการ
+                    ตรวจสอบอุปกรณ์ฉุกเฉินครบถ้วน
                   </span>
                 </div>
 
@@ -418,40 +427,40 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                       <span className="w-6 h-6 rounded-full bg-[#005c55] text-white font-black text-[12px] flex items-center justify-center shadow-xs shrink-0">
                         5
                       </span>
-                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">ตรวจสอบรายรายการ</h3>
+                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">ตรวจชุดที่ 3: ระบบเครื่องยนต์</h3>
                     </div>
                     <p className="text-[10.5px] text-slate-600 leading-tight">
-                      เลือกรายการ ตรวจสอบสภาพ ถ่ายภาพ และเลือกผลการตรวจ
+                      ถ่ายภาพห้องเครื่อง 1 ภาพ เช็ครอยรั่ว น้ำมันเครื่อง ลมเบรก ควันดำ
                     </p>
 
                     {/* Phone Mockup 5 */}
                     <div className="bg-slate-900 text-white p-2 rounded-xl text-[9px] space-y-1.5 shadow-inner mt-1 border border-slate-700">
-                      <div className="text-[9px] font-bold text-emerald-400 flex justify-between">
-                        <span>1. ไฟหน้า / ไฟเลี้ยว / ไฟท้าย</span>
-                        <span className="text-slate-400">1 / 15</span>
+                      <div className="flex items-center justify-between border-b border-slate-700 pb-1">
+                        <span className="font-bold text-emerald-400 text-[9.5px]">ชุดที่ 3: ระบบเครื่องยนต์</span>
+                        <span className="bg-emerald-900/60 text-emerald-300 px-1 py-0.2 rounded text-[7.5px] font-bold">
+                          ✓ ผ่านครบ
+                        </span>
                       </div>
-                      <div className="h-10 bg-slate-800 rounded-lg flex items-center justify-center text-[8.5px] text-slate-300 border border-slate-600 gap-1">
-                        <span className="material-symbols-outlined text-[13px] text-amber-400">photo_camera</span>
-                        <span>ถ่ายภาพประกอบ (ไม่เกินสภาพจริง)</span>
+                      <div className="h-12 bg-slate-800 rounded-lg flex items-center justify-center text-[8px] text-slate-300 border border-emerald-500/40 relative">
+                        <span className="material-symbols-outlined text-[18px] text-emerald-400">oil_barrel</span>
+                        <span className="absolute bottom-0 inset-x-0 bg-black/80 text-[7px] text-center text-emerald-300 py-0.5">
+                          📷 ภาพห้องเครื่องยนต์ ISUZU
+                        </span>
                       </div>
-                      <div className="grid grid-cols-3 gap-1 pt-0.5">
-                        <div className="bg-emerald-600 text-white text-center py-0.5 rounded font-bold text-[8px]">
-                          ผ่าน
+                      <div className="space-y-0.5 text-[8px]">
+                        <div className="flex justify-between bg-slate-800 p-0.8 rounded">
+                          <span>รอยรั่วซึม & ระดับน้ำมัน</span>
+                          <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
                         </div>
-                        <div className="bg-red-600 text-white text-center py-0.5 rounded font-bold text-[8px]">
-                          ไม่ผ่าน
+                        <div className="flex justify-between bg-slate-800 p-0.8 rounded">
+                          <span>ระบบลมเบรก & ไม่พบควันดำ</span>
+                          <span className="text-emerald-400 font-bold">✓ ผ่าน</span>
                         </div>
-                        <div className="bg-amber-600 text-white text-center py-0.5 rounded font-bold text-[8px]">
-                          งดตรวจสอบ
-                        </div>
-                      </div>
-                      <div className="bg-[#005c55] text-white text-center py-1 rounded font-bold text-[8.5px]">
-                        บันทึก
                       </div>
                     </div>
                   </div>
                   <span className="text-[9.5px] text-slate-500 font-bold mt-2 block">
-                    ถ่าย 1 ภาพยืนยันประจำชุด
+                    ตรวจสมรรถนะและความปลอดภัย
                   </span>
                 </div>
 
@@ -462,30 +471,33 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                       <span className="w-6 h-6 rounded-full bg-[#005c55] text-white font-black text-[12px] flex items-center justify-center shadow-xs shrink-0">
                         6
                       </span>
-                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">หมวดที่ 1–3 ครบถ้วน</h3>
+                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">ประทับลายน้ำอัตโนมัติ</h3>
                     </div>
                     <p className="text-[10.5px] text-slate-600 leading-tight">
-                      ตรวจสอบทุกรายการครบตามทุกหมวด
+                      ระบบประทับข้อความลายน้ำ สายรถ เลขข้างรถ และเวลาลงในรูปภาพจริง
                     </p>
 
                     {/* Phone Mockup 6 */}
-                    <div className="bg-slate-900 text-white p-2 rounded-xl text-[9.5px] space-y-1.5 shadow-inner mt-1 border border-slate-700">
-                      <div className="flex items-center justify-between bg-emerald-950/90 p-1.5 rounded-lg border border-emerald-600/70">
-                        <span className="font-bold text-emerald-300">หมวดที่ 1 ความปลอดภัย</span>
-                        <span className="text-emerald-400 font-bold">✓ ครบถ้วน</span>
-                      </div>
-                      <div className="flex items-center justify-between bg-emerald-950/90 p-1.5 rounded-lg border border-emerald-600/70">
-                        <span className="font-bold text-emerald-300">หมวดที่ 2 สมรรถนะเครื่อง</span>
-                        <span className="text-emerald-400 font-bold">✓ ครบถ้วน</span>
-                      </div>
-                      <div className="flex items-center justify-between bg-emerald-950/90 p-1.5 rounded-lg border border-emerald-600/70">
-                        <span className="font-bold text-emerald-300">หมวดที่ 3 อำนวยความสะดวก</span>
-                        <span className="text-emerald-400 font-bold">✓ ครบถ้วน</span>
+                    <div className="bg-slate-900 text-white p-2 rounded-xl text-[9.5px] space-y-1 shadow-inner mt-1 border border-slate-700">
+                      <div className="bg-slate-800 p-1.5 rounded-lg border border-emerald-500/40 text-[8px] space-y-0.5">
+                        <div className="text-emerald-400 font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[11px]">branding_watermark</span>
+                          <span>ขสมก. เขตการเดินรถที่ 6 (กปด.36)</span>
+                        </div>
+                        <div className="text-white">
+                          สาย 4-59 • เลขข้างรถ 50010 (ISUZU)
+                        </div>
+                        <div className="text-slate-300">
+                          ผู้ตรวจ: นายสมศักดิ์ ขสมก. (60124)
+                        </div>
+                        <div className="text-amber-300 font-medium">
+                          เวลาจริง: 22/09/2026 08:30 น.
+                        </div>
                       </div>
                     </div>
                   </div>
                   <span className="text-[9.5px] text-emerald-700 font-bold mt-2 block">
-                    ✓ ตรวจครบ 15 / 15 รายการ
+                    ✓ ลายน้ำป้องกันการสวมรอย
                   </span>
                 </div>
 
@@ -496,39 +508,30 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                       <span className="w-6 h-6 rounded-full bg-[#005c55] text-white font-black text-[12px] flex items-center justify-center shadow-xs shrink-0">
                         7
                       </span>
-                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">สรุปผลการตรวจสอบ</h3>
+                      <h3 className="font-extrabold text-[12.5px] text-[#002f6c]">ตรวจทานสรุปผล & ลงนาม</h3>
                     </div>
                     <p className="text-[10.5px] text-slate-600 leading-tight">
-                      ระบบสรุปผลการตรวจแยกตามหมวด
+                      เปิดหน้าต่างสรุปผล ตรวจทานภาพ 3 ชุด และลงนามผู้ตรวจการ
                     </p>
 
                     {/* Phone Mockup 7 */}
-                    <div className="bg-slate-900 text-white p-2 rounded-xl text-[9px] space-y-1.5 shadow-inner mt-1 border border-slate-700">
-                      <div className="grid grid-cols-3 gap-1 text-center">
-                        <div className="bg-slate-800 p-1 rounded-md">
-                          <span className="block text-[7.5px] text-slate-400">รวม</span>
-                          <span className="font-bold text-white text-[10px]">12</span>
-                        </div>
-                        <div className="bg-red-950/90 p-1 rounded-md border border-red-600">
-                          <span className="block text-[7.5px] text-red-400">ไม่ผ่าน</span>
-                          <span className="font-bold text-red-300 text-[10px]">2</span>
-                        </div>
-                        <div className="bg-amber-950/90 p-1 rounded-md border border-amber-600">
-                          <span className="block text-[7.5px] text-amber-400">งดตรวจ</span>
-                          <span className="font-bold text-amber-300 text-[10px]">1</span>
-                        </div>
+                    <div className="bg-slate-900 text-white p-2 rounded-xl text-[9px] space-y-1 shadow-inner mt-1 border border-slate-700">
+                      <div className="flex items-center justify-between bg-emerald-950/90 p-1 rounded-md border border-emerald-600 text-emerald-300 text-[8.5px] font-bold">
+                        <span>✓ ผ่านเกณฑ์มาตรฐานครบทั้ง 3 ชุด</span>
+                        <span className="text-white bg-emerald-700 px-1 py-0.2 rounded text-[7.5px]">พร้อมบริการ</span>
                       </div>
-                      <div className="text-[8px] text-red-300 bg-red-950/40 p-1 rounded border border-red-900/60 leading-tight">
-                        - 2 - จุดลงนิรภัยไม่ทำงาน<br />
-                        - 9 - ค้อนทุบกระจกนิรภัยชำรุด/สูญหาย
+                      <div className="grid grid-cols-3 gap-0.5 text-center text-[7.5px] text-slate-300">
+                        <div className="bg-slate-800 p-0.5 rounded">📷 ภายนอก</div>
+                        <div className="bg-slate-800 p-0.5 rounded">📷 ภายใน</div>
+                        <div className="bg-slate-800 p-0.5 rounded">📷 เครื่อง</div>
                       </div>
                       <div className="bg-[#005c55] text-white text-center py-1 rounded font-bold text-[8.5px]">
-                        ยืนยันและส่งผลการตรวจ
+                        ยืนยันและบันทึกข้อมูล (ส่ง Cloud)
                       </div>
                     </div>
                   </div>
                   <span className="text-[9.5px] text-slate-500 font-bold mt-2 block">
-                    ตรวจทานก่อนส่ง Cloud
+                    ตรวจทานก่อนบันทึกจริง
                   </span>
                 </div>
               </div>
@@ -543,24 +546,24 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                         8
                       </span>
                       <h3 className="font-extrabold text-[13px] text-[#002f6c]">
-                        ยืนยันและส่งผลการตรวจ
+                        ซิงค์ข้อมูล Cloud Firestore
                       </h3>
                     </div>
                     <p className="text-[11px] text-slate-600 leading-tight">
-                      ยืนยันผลการตรวจ ระบบจะบันทึกและส่งให้หัวหน้างาน
+                      ข้อมูลถูกส่งขึ้นระบบ Cloud Firestore แบบ Real-time ทันที พร้อมแสดงผล
                     </p>
 
                     {/* Phone Mockup 8 */}
                     <div className="bg-slate-900 text-white p-3 rounded-xl text-center space-y-2 shadow-inner mt-2 border border-slate-700">
                       <div className="w-10 h-10 rounded-full bg-emerald-500 text-white mx-auto flex items-center justify-center shadow-md">
-                        <span className="material-symbols-outlined text-[24px]">check</span>
+                        <span className="material-symbols-outlined text-[24px]">cloud_done</span>
                       </div>
-                      <span className="font-black text-white text-[12px] block">บันทึกผลสำเร็จ</span>
+                      <span className="font-black text-white text-[12px] block">บันทึกผลขึ้นคลาวด์สำเร็จ</span>
                       <p className="text-[9.5px] text-emerald-300">
-                        ส่งผลการตรวจเรียบร้อยแล้ว
+                        สาย 4-59 (50010) บันทึกเรียบร้อย
                       </p>
                       <div className="bg-slate-800 text-slate-300 text-[9px] py-1 rounded-lg">
-                        กลับหน้าหลัก
+                        ไปหน้าแดชบอร์ดสรุปผล (Step 3)
                       </div>
                     </div>
                   </div>
@@ -574,41 +577,36 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                         9
                       </span>
                       <h3 className="font-extrabold text-[13px] text-[#002f6c]">
-                        บันทึกข้อมูลเสร็จสิ้น
+                        แดชบอร์ด, ส่งออก CSV & ส่ง LINE
                       </h3>
                     </div>
                     <p className="text-[11px] text-slate-600 leading-tight">
-                      ข้อมูลถูกบันทึกเรียบร้อย สามารถตรวจสอบย้อนหลังได้
+                      ดูรายงานความพร้อมกองรถ ส่งออก Excel/CSV และคัดลอกสรุปส่ง LINE กปด.6
                     </p>
 
                     {/* Phone Mockup 9 */}
-                    <div className="bg-slate-900 text-white p-2.5 rounded-xl text-[9.5px] space-y-1 shadow-inner mt-2 border border-slate-700">
-                      <div className="text-center font-bold text-slate-300 pb-1 border-b border-slate-700 text-[9.5px]">
-                        📜 ประวัติการตรวจสอบ
+                    <div className="bg-slate-900 text-white p-2.5 rounded-xl text-[9.5px] space-y-1.5 shadow-inner mt-2 border border-slate-700">
+                      <div className="text-center font-bold text-slate-300 pb-1 border-b border-slate-700 text-[9.5px] flex items-center justify-center gap-1">
+                        <span className="material-symbols-outlined text-[12px] text-emerald-400">dashboard</span>
+                        <span>แดชบอร์ดสรุปผล ขสมก. เขต 6</span>
                       </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg flex justify-between items-center border border-slate-700">
-                        <div>
-                          <span className="font-bold text-white block">26/08/2569 07:45</span>
-                          <span className="text-[8px] text-slate-400">6-55120</span>
+                      <div className="grid grid-cols-2 gap-1 text-[8.5px]">
+                        <div className="bg-slate-800 p-1 rounded text-center">
+                          <span className="text-slate-400 block text-[7.5px]">ตรวจแล้ว</span>
+                          <strong className="text-white text-[11px]">48 คัน</strong>
                         </div>
-                        <span className="text-emerald-400 font-bold text-[9px]">หน.ซีดี หมวด 2</span>
-                      </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg flex justify-between items-center border border-slate-700">
-                        <div>
-                          <span className="font-bold text-white block">26/08/2569 07:30</span>
-                          <span className="text-[8px] text-slate-400">6-55120</span>
+                        <div className="bg-emerald-950/80 p-1 rounded border border-emerald-600 text-center">
+                          <span className="text-emerald-400 block text-[7.5px]">พร้อมบริการ</span>
+                          <strong className="text-emerald-300 text-[11px]">46 คัน</strong>
                         </div>
-                        <span className="text-emerald-400 font-bold text-[9px]">คน.ตัว หมวด 1</span>
                       </div>
-                      <div className="bg-slate-800 p-1.5 rounded-lg flex justify-between items-center border border-slate-700">
-                        <div>
-                          <span className="font-bold text-white block">26/08/2569 07:20</span>
-                          <span className="text-[8px] text-slate-400">6-55120</span>
+                      <div className="grid grid-cols-2 gap-1 pt-1">
+                        <div className="bg-slate-800 border border-slate-600 text-white text-center py-1 rounded text-[8px] font-bold">
+                          📥 ส่งออก CSV
                         </div>
-                        <span className="text-emerald-400 font-bold text-[9px]">หน.ซีดี หมวด 3</span>
-                      </div>
-                      <div className="bg-[#005c55] text-white text-center py-1 rounded font-bold text-[8.5px]">
-                        ดูประวัติทั้งหมด
+                        <div className="bg-emerald-700 text-white text-center py-1 rounded text-[8px] font-bold">
+                          📋 ส่ง LINE กปด.6
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -622,35 +620,28 @@ export const OfficialPoster: React.FC<OfficialPosterProps> = () => {
                         10
                       </span>
                       <h3 className="font-extrabold text-[13px] text-[#002f6c]">
-                        Dashboard หัวหน้างาน / ผู้บริหาร
+                        เริ่มต้นตรวจคันใหม่ได้ทันที
                       </h3>
                     </div>
                     <p className="text-[11px] text-slate-600 leading-tight">
-                      ติดตามคุณภาพการตรวจรถยนต์ในพื้นที่ วิเคราะห์แนวโน้มการตรวจงานแบบต่างๆ
+                      กดปุ่ม "🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)" เพื่อรีเซ็ตฟอร์มและเริ่มตรวจคันใหม่
                     </p>
 
-                    {/* Desktop / Tablet Dashboard Mockup 10 */}
-                    <div className="bg-slate-900 text-white p-2.5 rounded-xl text-[9.5px] space-y-1.5 shadow-inner mt-2 border border-slate-700">
-                      <div className="text-center font-bold text-emerald-400 pb-1 border-b border-slate-700 text-[10px]">
-                        📊 Dashboard - เขตการเดินรถที่ 6
+                    {/* Phone Mockup 10 */}
+                    <div className="bg-slate-900 text-white p-2.5 rounded-xl text-[9.5px] space-y-2 shadow-inner mt-2 border border-slate-700 text-center">
+                      <div className="w-9 h-9 rounded-full bg-emerald-600/30 text-emerald-400 mx-auto flex items-center justify-center border border-emerald-500/50">
+                        <span className="material-symbols-outlined text-[20px]">replay</span>
                       </div>
-                      <div className="grid grid-cols-3 gap-1 text-center">
-                        <div className="bg-slate-800 p-1 rounded-md">
-                          <span className="block text-[7.5px] text-slate-400">คันตรวจแล้ว</span>
-                          <span className="font-black text-white text-[11px]">68 คัน</span>
-                        </div>
-                        <div className="bg-emerald-950/90 p-1 rounded-md border border-emerald-600">
-                          <span className="block text-[7.5px] text-emerald-400">ผ่าน</span>
-                          <span className="font-black text-emerald-300 text-[11px]">57 คัน</span>
-                        </div>
-                        <div className="bg-red-950/90 p-1 rounded-md border border-red-600">
-                          <span className="block text-[7.5px] text-red-400">ไม่ผ่าน</span>
-                          <span className="font-black text-red-300 text-[11px]">9 คัน</span>
-                        </div>
+                      <div>
+                        <span className="font-bold text-white text-[10.5px] block">
+                          พร้อมตรวจรถคันต่อไป
+                        </span>
+                        <span className="text-[8.5px] text-slate-400">
+                          คงชื่อผู้ตรวจไว้ ล้างเลขข้างรถพร้อมรับคันใหม่
+                        </span>
                       </div>
-                      <div className="flex items-center justify-between bg-slate-800/90 p-1.5 rounded-lg text-[8.5px]">
-                        <span>อัตราการผ่าน:</span>
-                        <span className="font-black text-emerald-400 text-[10px]">83.8%</span>
+                      <div className="bg-[#005c55] text-white text-center py-1.5 rounded-lg font-bold text-[9px] shadow-sm">
+                        🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)
                       </div>
                     </div>
                   </div>

@@ -19,61 +19,90 @@ interface Chapter {
 const CHAPTERS: Chapter[] = [
   {
     id: 1,
-    title: 'ระบุข้อมูลผู้ตรวจ & สแกน QR Code ประจำรถ',
+    title: 'Step 1: ระบุรหัสผู้ตรวจ (ID/Name) & สแกน QR Code ประจำรถ',
     stepName: 'Step 1',
-    duration: 18,
-    description: 'กรอกชื่อผู้ตรวจ เลือกกลุ่มงาน (กปด.) และสแกน QR Code หน้ารถหรือข้างรถเพื่อดึงสาย (เซล B) และเลขข้างรถ (เซล D) อัตโนมัติ',
+    duration: 20,
+    description:
+      'กรอกรหัสพนักงาน (ID) ดึงชื่ออัตโนมัติ เลือกกลุ่มงาน (กปด.) และสแกน QR Code ประจำรถ เพื่อดึงสายเดินรถ (เซล B) และเลขข้างรถ (เซล D) พร้อมรุ่น ISUZU และทะเบียนรถ',
     keyPoints: [
-      'ระบุชื่อ-นามสกุลผู้ตรวจ และเลือกกลุ่มงานปฏิบัติการเดินรถ',
-      'กดปุ่ม "เปิดกล้องสแกน QR" ส่องไปที่ QR ประจำรถ',
-      'ระบบดึงสายเดินรถจาก เซล B และเลขข้างรถจาก เซล D ให้อัตโนมัติทันที',
-      'กดปุ่ม "เริ่มการตรวจ (ไปขั้นตอนที่ 2)"'
+      'กรอกรหัสพนักงาน เช่น 60124 ระบบดึงชื่อ "นายสมศักดิ์ ขสมก." อัตโนมัติ',
+      'เลือกสังกัดกลุ่มงานปฏิบัติการเดินรถ: กปด.16, กปด.26 หรือ กปด.36',
+      'กดปุ่ม "📷 เปิดกล้องสแกน QR" ส่องป้ายหน้ารถหรือข้างรถ',
+      'ระบบดึงสายเดินรถจากเซล B และเลขข้างรถจากเซล D พร้อมข้อมูลทะเบียนรถทันที',
+      'มีฐานข้อมูล 326 คันของเขต 6 ค้นหาหรือเลือกได้ทันที',
+      'กดปุ่ม "เริ่มต้นตรวจสอบสภาพรถ (ไปขั้นตอนที่ 2) →"'
     ],
     subtitles: [
-      { time: 0, text: 'ยินดีต้อนรับสู่ระบบตรวจสภาพรถโดยสาร ขสมก. เขต 6' },
-      { time: 3, text: 'ขั้นตอนที่ 1: ให้กรอกชื่อผู้ตรวจ และเลือกกลุ่มงานเดินรถ' },
-      { time: 7, text: 'จากนั้นกดปุ่ม "เปิดกล้องสแกน QR" ส่องที่ QR Code หน้ารถ' },
-      { time: 11, text: 'ระบบจะดึงสายเดินรถจากเซล B และเลขข้างรถจากเซล D ให้อัตโนมัติ' },
-      { time: 15, text: 'เมื่อข้อมูลครบถ้วนแล้ว ให้กดปุ่ม "เริ่มการตรวจ" เพื่อไปขั้นตอนที่ 2' }
+      { time: 0, text: 'ยินดีต้อนรับสู่ระบบตรวจสภาพรถโดยสาร ขสมก. เขตการเดินรถที่ 6' },
+      { time: 4, text: 'ขั้นตอนที่ 1: กรอกเลขประจำตัวผู้ตรวจ ระบบดึงชื่อ-นามสกุลให้อัตโนมัติ' },
+      { time: 8, text: 'เลือกสังกัดกลุ่มงาน เช่น กปด.36 อู่พุทธมณฑลสาย 3 และกดเปิดกล้องสแกน QR' },
+      { time: 12, text: 'ระบบดึงสายเดินรถจากเซล B และเลขข้างรถจากเซล D พร้อมทะเบียนรถทันที' },
+      { time: 16, text: 'กดปุ่ม "เริ่มต้นตรวจสอบสภาพรถ" เพื่อก้าวสู่ขั้นตอนที่ 2' }
     ]
   },
   {
     id: 2,
-    title: 'ตรวจ 3 ชุดรายการมาตรฐาน (ภายนอก, ภายใน, เครื่องยนต์) & ถ่ายภาพยืนยัน',
+    title: 'Step 2: ตรวจ 3 ชุดรายการมาตรฐาน & ถ่ายภาพพร้อมลายน้ำ',
     stepName: 'Step 2',
     duration: 22,
-    description: 'ตรวจเช็คลิสต์ 3 ชุดรายการหลัก ถ่ายภาพยืนยันชุดละ 1 ภาพ พร้อมประทับลายน้ำข้อมูลรถและเวลาอัตโนมัติ',
+    description:
+      'ตรวจเช็คลิสต์มาตรฐาน 3 ชุดหลัก (ภายนอก, ภายใน, เครื่องยนต์) ถ่ายภาพยืนยันชุดละ 1 ภาพ พร้อมประทับลายน้ำข้อมูลรถและเวลาอัตโนมัติ',
     keyPoints: [
-      'ชุดที่ 1 ภายนอกตัวรถ: ถ่ายภาพ 1 ภาพ + เช็ครายการย่อยตัวถัง ไฟส่องสว่าง ยางรถ',
-      'ชุดที่ 2 ภายในห้องโดยสาร: ถ่ายภาพ 1 ภาพ + เช็คประตู CCTV แอร์ ค้อนฉุกเฉิน ถังดับเพลิง',
-      'ชุดที่ 3 ระบบเครื่องยนต์: ถ่ายภาพห้องเครื่อง 1 ภาพ + เช็คการรั่วซึม ลมเบรก น้ำมันเครื่อง ควันดำ',
-      'กดปุ่ม "ผ่านทั้งหมดในชุดนี้" หรือเลือกผ่าน/ไม่ผ่านเป็นรายข้อ',
-      'เมื่อครบทั้ง 3 ชุด กด "สรุปผลและบันทึกข้อมูล" ไปยังขั้นตอนที่ 3'
+      'ชุดที่ 1 ภายนอกตัวรถ: ถ่าย 1 ภาพ + เช็คตัวถัง สี ไฟส่องสว่าง ยางรถ และป้ายสาย',
+      'ระบบประทับลายน้ำ ขสมก. เขต 6, สาย 4-59, 50010 และเวลาลงในภาพถ่ายอัตโนมัติ',
+      'ชุดที่ 2 ภายในห้องโดยสาร และ ชุดที่ 3 ระบบเครื่องยนต์ ถ่ายภาพยืนยันชุดละ 1 ภาพ',
+      'กดปุ่มทางลัด "✓ ผ่านทั้งหมดในชุดนี้" เพื่อความรวดเร็วในการบันทึก',
+      'ปุ่ม "⚡ เติมข้อมูลทดสอบด่วน (Quick Demo)" ช่วยอำนวยความสะดวกในการทดสอบ'
     ],
     subtitles: [
-      { time: 0, text: 'ขั้นตอนที่ 2: ตรวจสอบสภาพรถแบบ 3 ชุดรายการมาตรฐาน' },
-      { time: 4, text: 'ชุดที่ 1 ภายนอกตัวรถ: ถ่ายภาพยืนยัน 1 ภาพ และเช็ครายการย่อยภายนอก' },
-      { time: 8, text: 'ชุดที่ 2 ภายในห้องโดยสาร: ถ่ายภาพ 1 ภาพ และเช็ครายการย่อยในห้องโดยสาร' },
-      { time: 13, text: 'ชุดที่ 3 ระบบเครื่องยนต์: ถ่ายภาพห้องเครื่อง 1 ภาพ และเช็ครายการย่อยเครื่องยนต์' },
-      { time: 17, text: 'เมื่อตรวจครบทั้ง 3 ชุด ให้กดปุ่ม "สรุปผลและบันทึกข้อมูล" เพื่อส่งรายงาน' }
+      { time: 0, text: 'ขั้นตอนที่ 2: ตรวจสอบสภาพรถแบบ 3 ชุดรายการมาตรฐานความปลอดภัย' },
+      { time: 4, text: 'ชุดที่ 1 ภายนอกตัวรถ: ถ่ายภาพ 1 ภาพ และประเมินรายการย่อยภายนอก' },
+      { time: 8, text: 'ระบบจะประทับลายน้ำ ขสมก. เขต 6 สายรถ เลขข้างรถ และเวลาลงในรูปภาพอัตโนมัติ' },
+      { time: 13, text: 'ชุดที่ 2 และชุดที่ 3: ตรวจห้องโดยสารและเครื่องยนต์ พร้อมปุ่มผ่านทั้งหมดในชุด' },
+      { time: 18, text: 'เมื่อตรวจครบทั้ง 3 ชุด ให้กดปุ่ม "สรุปผลและบันทึกข้อมูล"' }
     ]
   },
   {
     id: 3,
-    title: 'แดชบอร์ดสรุปผล Cloud & เริ่มต้นตรวจคันถัดไป',
-    stepName: 'Step 3',
-    duration: 16,
-    description: 'ดูรายงานสรุปผล Real-time บนคลาวด์ และกดเริ่มต้นใหม่เพื่อตรวจคันต่อไปได้อย่างต่อเนื่อง',
+    title: 'Summary: ตรวจทานสรุปผล & ลงนามส่ง Cloud Firestore',
+    stepName: 'สรุปผล',
+    duration: 18,
+    description:
+      'หน้าต่าง Modal ตรวจทานผลการตรวจ 3 ชุด พรีวิวภาพถ่ายหลักฐาน บันทึกคำสั่งการหัวหน้างาน ลงลายมือชื่อดิจิทัล และส่ง Cloud Firestore',
     keyPoints: [
-      'ข้อมูลจะถูกซิงค์ขึ้นระบบ Cloud Firestore แบบ Real-time ทันที',
-      'ดูสถิติภาพรวม ยอดผ่าน/ไม่ผ่าน และรายการบันทึกย้อนหลัง',
-      'กดปุ่ม "🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)" เพื่อล้างค่าและกลับไป Step 1 ทันที'
+      'แสดงสถานะความพร้อม: "✓ ผ่านเกณฑ์มาตรฐานครบทั้ง 3 ชุด (พร้อมบริการ 100%)"',
+      'พรีวิวภาพถ่ายหลักฐานที่ผ่านการประทับลายน้ำครบทั้ง 3 ชุด',
+      'บันทึกคำสั่งการของหัวหน้างาน / ผู้ตรวจการ (Supervisor Note)',
+      'ลงลายมือชื่อดิจิทัล (Digital Signature) บนหน้าจอ',
+      'กด "ยืนยันและบันทึกข้อมูล" ข้อมูลจะถูกบันทึกขึ้น Cloud Firestore ทันที'
     ],
     subtitles: [
-      { time: 0, text: 'ขั้นตอนที่ 3: ระบบบันทึกผลขึ้น Cloud Firestore ทันที' },
-      { time: 4, text: 'สามารถดูรายงานสถิติ และประวัติการตรวจย้อนหลังได้ใน Dashboard' },
-      { time: 9, text: 'หากต้องการตรวจคันถัดไป ให้กดปุ่ม "เริ่มต้นใหม่ (ตรวจคันถัดไป)"' },
-      { time: 13, text: 'ระบบจะรีเซ็ตฟอร์มให้สะอาด และกลับไปที่ Step 1 พร้อมตรวจต่อทันที' }
+      { time: 0, text: 'หน้าต่างสรุปผลการตรวจสอบ: ตรวจทานความถูกต้องก่อนส่งรายงาน' },
+      { time: 4, text: 'ตรวจสอบพรีวิวภาพถ่ายหลักฐานทั้ง 3 ชุด ที่ประทับลายน้ำสมบูรณ์' },
+      { time: 8, text: 'บันทึกคำสั่งการของหัวหน้างาน และลงลายมือชื่อดิจิทัลบนหน้าจอ' },
+      { time: 13, text: 'กดปุ่ม "ยืนยันและบันทึกข้อมูล" ระบบจะซิงค์ข้อมูลขึ้น Cloud Firestore ทันที' }
+    ]
+  },
+  {
+    id: 4,
+    title: 'Step 3: แดชบอร์ด Real-time, ส่ง LINE กปด.6 & เริ่มตรวจคันถัดไป',
+    stepName: 'Step 3',
+    duration: 20,
+    description:
+      'ดู 4 ตัวชี้วัดสถิติกองรถ Real-time ส่งออก Excel/CSV คัดลอกสรุปส่ง LINE กปด.6 และกดเริ่มตรวจคันใหม่',
+    keyPoints: [
+      'ป้ายสถานะสด: 🔥 เชื่อมต่อ Cloud Firestore เรียบร้อย (Real-time)',
+      'การ์ดสถิติ 4 ใบ: ตรวจวันนี้, พร้อมบริการ, ต้องแก้ไข, และดัชนีความพร้อมกองรถ (%)',
+      'ปุ่ม "📋 คัดลอกสรุปส่ง LINE กปด.6" ช่วยส่งรายงานเข้ากลุ่มงานทันที',
+      'ปุ่ม "📥 ส่งออกเป็น Excel / CSV" และพิมพ์รายงานเอกสาร',
+      'ปุ่ม "🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)" รีเซ็ตฟอร์มและกลับไป Step 1 ทันที'
+    ],
+    subtitles: [
+      { time: 0, text: 'ขั้นตอนที่ 3: แดชบอร์ดสรุปผลการตรวจสภาพรถ ขสมก. เขต 6' },
+      { time: 4, text: 'ดู 4 ตัวชี้วัดสำคัญ และดัชนีความพร้อมของกองรถแบบ Real-time บน Cloud' },
+      { time: 8, text: 'กดปุ่ม "คัดลอกสรุปส่ง LINE กปด.6" เพื่อส่งรายงานเข้ากลุ่มไลน์ได้ทันที' },
+      { time: 12, text: 'สามารถส่งออกเป็น Excel และพิมพ์เอกสารรายงานตรวจสภาพได้' },
+      { time: 16, text: 'กดปุ่ม "🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)" เพื่อเริ่มตรวจคันใหม่ได้ทันที' }
     ]
   }
 ];
@@ -212,7 +241,7 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
                 </span>
               </h2>
               <p className="text-[11px] text-slate-400">
-                เขตการเดินรถที่ 6 • สแกน QR, ถ่ายภาพประเมิน 12 จุด, และแดชบอร์ด
+                เขตการเดินรถที่ 6 • สแกน QR (เซล B/D), ตรวจ 3 ชุดมาตรฐาน, และแดชบอร์ด Real-time
               </p>
             </div>
           </div>
@@ -237,36 +266,52 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
               {/* Scene Simulation Render based on Chapter and Time */}
               {currentChapterIndex === 0 && (
                 /* Chapter 1: Step 1 Simulation */
-                <div className="relative w-full h-full p-4 flex flex-col items-center justify-center">
+                <div className="relative w-full h-full p-3 sm:p-4 flex flex-col items-center justify-center">
                   {/* Background app mock */}
-                  <div className="w-[85%] max-w-md bg-white rounded-xl shadow-2xl p-4 text-slate-800 border border-slate-200 animate-fadeIn">
-                    <div className="flex items-center justify-between border-b pb-2 mb-3">
-                      <span className="text-[12px] font-bold text-[#005c55] flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-[#005c55]"></span>
+                  <div className="w-[90%] max-w-md bg-white rounded-xl shadow-2xl p-3.5 text-slate-800 border border-slate-200 animate-fadeIn">
+                    <div className="flex items-center justify-between border-b pb-2 mb-2.5">
+                      <span className="text-[12px] font-bold text-[#005c55] flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#005c55] animate-ping"></span>
                         STEP 1 • ข้อมูลผู้ตรวจและรถโดยสาร
                       </span>
-                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
                         ขสมก. เขต 6
                       </span>
                     </div>
 
                     <div className="space-y-2 text-[11px]">
-                      <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                        <span className="text-slate-500 block text-[9px]">1. ชื่อผู้ตรวจ:</span>
-                        <strong className="text-slate-800">
-                          {currentTime > 3 ? 'นายสุรศักดิ์ สุขใจ (สายตรวจ)' : 'กำลังพิมพ์ชื่อ...'}
-                        </strong>
+                      {/* ID and Name auto lookup */}
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-slate-50 p-2 rounded-lg border border-slate-200">
+                          <span className="text-slate-500 block text-[9px]">รหัสพนักงาน (ID):</span>
+                          <strong className="text-emerald-700 text-[12px]">
+                            {currentTime > 1 ? '60124' : 'พิมพ์รหัส...'}
+                          </strong>
+                        </div>
+                        <div className="bg-slate-50 p-2 rounded-lg border border-slate-200">
+                          <span className="text-slate-500 block text-[9px]">ชื่อผู้ตรวจ:</span>
+                          <strong className="text-slate-800 text-[11px]">
+                            {currentTime > 2 ? 'นายสมศักดิ์ ขสมก.' : '-'}
+                          </strong>
+                        </div>
                       </div>
 
-                      <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                        <span className="text-slate-500 block text-[9px]">2. กลุ่มงาน:</span>
-                        <strong className="text-slate-800">กลุ่มงานปฏิบัติการเดินรถที่ 1 (กปด.16)</strong>
+                      <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 flex items-center justify-between">
+                        <div>
+                          <span className="text-slate-500 block text-[9px]">สังกัดกลุ่มงาน:</span>
+                          <strong className="text-amber-800 font-bold">
+                            {currentTime > 4 ? 'กปด.36 (อู่พุทธมณฑลสาย 3)' : 'เลือกกลุ่มงาน...'}
+                          </strong>
+                        </div>
+                        <span className="text-[9px] bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-semibold">
+                          เขต 6
+                        </span>
                       </div>
 
                       {/* QR Scan Action Box */}
                       <div
-                        className={`p-2.5 rounded-lg border transition-all ${
-                          currentTime >= 7 && currentTime <= 12
+                        className={`p-2 rounded-lg border transition-all ${
+                          currentTime >= 8 && currentTime <= 13
                             ? 'bg-[#005c55] text-white ring-2 ring-emerald-400'
                             : 'bg-emerald-50 text-emerald-900 border-emerald-200'
                         }`}
@@ -276,15 +321,20 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
                             <span className="material-symbols-outlined text-[18px]">
                               qr_code_scanner
                             </span>
-                            <span className="font-bold">
-                              {currentTime >= 11
-                                ? '✓ สแกน QR Code สำเร็จแล้ว'
-                                : currentTime >= 7
-                                ? '📷 กำลังสแกน QR Code...'
-                                : '3. สแกน QR Code ประจำรถ'}
-                            </span>
+                            <div>
+                              <span className="font-bold block text-[11px]">
+                                {currentTime >= 12
+                                  ? '✓ สแกน QR Code ประจำรถสำเร็จ'
+                                  : currentTime >= 8
+                                  ? '📷 กำลังสแกน QR หน้ารถ...'
+                                  : 'สแกน QR Code ประจำรถ'}
+                              </span>
+                              <span className="text-[9px] opacity-80">
+                                ดึงสาย (เซล B) & เลขข้างรถ (เซล D)
+                              </span>
+                            </div>
                           </div>
-                          {currentTime >= 11 && (
+                          {currentTime >= 12 && (
                             <span className="text-[9px] bg-white text-emerald-800 font-bold px-1.5 py-0.5 rounded">
                               Auto-filled
                             </span>
@@ -293,44 +343,52 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
                       </div>
 
                       {/* Auto-filled values */}
-                      <div className="grid grid-cols-2 gap-2 pt-1">
-                        <div className="bg-slate-100 p-2 rounded border border-slate-200">
-                          <span className="text-slate-500 block text-[9px]">สายเดินรถ:</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-emerald-50/80 p-2 rounded-lg border border-emerald-200">
+                          <span className="text-slate-500 block text-[9px]">สายเดินรถ (เซล B):</span>
                           <strong className="text-[#005c55] text-[13px]">
-                            {currentTime >= 11 ? '511' : '-'}
+                            {currentTime >= 12 ? 'สาย 4-59' : '-'}
                           </strong>
                         </div>
-                        <div className="bg-slate-100 p-2 rounded border border-slate-200">
-                          <span className="text-slate-500 block text-[9px]">เลขข้างรถ:</span>
+                        <div className="bg-emerald-50/80 p-2 rounded-lg border border-emerald-200">
+                          <span className="text-slate-500 block text-[9px]">เลขข้างรถ (เซล D):</span>
                           <strong className="text-[#005c55] text-[13px]">
-                            {currentTime >= 11 ? '3-50212' : '-'}
+                            {currentTime >= 12 ? '50010' : '-'}
                           </strong>
                         </div>
                       </div>
 
+                      {currentTime >= 12 && (
+                        <div className="flex items-center justify-between text-[10px] text-slate-600 bg-slate-100 px-2 py-1 rounded">
+                          <span>ยี่ห้อ: <strong>ISUZU</strong></span>
+                          <span>ทะเบียน: <strong className="text-emerald-700">11-8991</strong> (เซล E)</span>
+                        </div>
+                      )}
+
                       {/* Next button */}
                       <button
-                        className={`w-full py-2 rounded-lg font-bold text-center text-[12px] transition-all ${
-                          currentTime >= 14
-                            ? 'bg-[#005c55] text-white ring-2 ring-emerald-400 scale-[1.02]'
+                        className={`w-full py-2 rounded-lg font-bold text-center text-[11px] transition-all flex items-center justify-center gap-1 ${
+                          currentTime >= 15
+                            ? 'bg-[#005c55] text-white ring-2 ring-emerald-400 scale-[1.02] shadow-md'
                             : 'bg-slate-300 text-slate-500'
                         }`}
                       >
-                        เริ่มการตรวจ (ไปขั้นตอนที่ 2) →
+                        <span>เริ่มต้นตรวจสอบสภาพรถ (ไปขั้นตอนที่ 2)</span>
+                        <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                       </button>
                     </div>
                   </div>
 
                   {/* QR Overlay laser animation when scanning */}
-                  {currentTime >= 7 && currentTime <= 11 && (
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-xs animate-fadeIn">
+                  {currentTime >= 8 && currentTime <= 12 && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-xs animate-fadeIn z-10">
                       <div className="w-48 h-48 border-2 border-emerald-400 rounded-2xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center">
-                        <span className="material-symbols-outlined text-[64px] text-white/80">
+                        <span className="material-symbols-outlined text-[64px] text-white/80 animate-pulse">
                           qr_code_2
                         </span>
                         <div className="w-full h-1 bg-emerald-400 shadow-[0_0_12px_#34d399] animate-bounce"></div>
-                        <span className="absolute bottom-2 bg-black/80 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-                          สาย 511 | 3-50212
+                        <span className="absolute bottom-2 bg-black/85 text-emerald-300 text-[10px] px-2.5 py-0.5 rounded-full font-bold border border-emerald-400/40">
+                          สาย 4-59 | เลข 50010
                         </span>
                       </div>
                     </div>
@@ -340,82 +398,92 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
 
               {currentChapterIndex === 1 && (
                 /* Chapter 2: Step 2 Simulation */
-                <div className="relative w-full h-full p-4 flex flex-col items-center justify-center">
-                  <div className="w-[88%] max-w-md bg-white rounded-xl shadow-2xl p-3.5 text-slate-800 border border-slate-200 animate-fadeIn">
-                    <div className="flex items-center justify-between border-b pb-2 mb-2">
-                      <span className="text-[12px] font-bold text-[#005c55] flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[16px]">photo_camera</span>
-                        STEP 2 • ถ่ายภาพตรวจสอบ 12 รายการ
+                <div className="relative w-full h-full p-3 sm:p-4 flex flex-col items-center justify-center">
+                  <div className="w-[90%] max-w-md bg-white rounded-xl shadow-2xl p-3 text-slate-800 border border-slate-200 animate-fadeIn">
+                    <div className="flex items-center justify-between border-b pb-1.5 mb-2">
+                      <span className="text-[11px] font-bold text-[#005c55] flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[16px]">checklist</span>
+                        STEP 2 • ตรวจ 3 ชุดรายการมาตรฐาน
                       </span>
                       <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
-                        {currentTime >= 15 ? '12 / 12 จุด' : '1 / 12 จุด'}
+                        {currentTime >= 16 ? 'ครบ 3/3 ชุด (100%)' : 'ชุดที่ 1 / 3'}
                       </span>
                     </div>
 
+                    {/* 3 Jump Strips */}
+                    <div className="grid grid-cols-3 gap-1 mb-2 text-[10px] text-center">
+                      <div className="bg-emerald-100 text-emerald-900 border border-emerald-300 p-1 rounded font-bold">
+                        1. ภายนอก ✓
+                      </div>
+                      <div className={`p-1 rounded font-bold ${currentTime >= 12 ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-slate-100 text-slate-500'}`}>
+                        2. ภายใน {currentTime >= 12 ? '✓' : ''}
+                      </div>
+                      <div className={`p-1 rounded font-bold ${currentTime >= 15 ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-slate-100 text-slate-500'}`}>
+                        3. เครื่องยนต์ {currentTime >= 15 ? '✓' : ''}
+                      </div>
+                    </div>
+
                     {/* Inspection Item Card Mock */}
-                    <div className="border border-slate-200 rounded-lg p-2.5 bg-slate-50 space-y-2">
+                    <div className="border border-slate-200 rounded-lg p-2 bg-slate-50 space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <strong className="text-[12px] text-slate-900">
-                          1. สภาพตัวถัง สี และความสะอาด
+                        <strong className="text-[11px] text-slate-900">
+                          ชุดที่ 1: ภายนอกตัวรถ (4 รายการ)
                         </strong>
-                        <span
-                          className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                            currentTime >= 12
-                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                              : 'bg-slate-200 text-slate-600'
-                          }`}
-                        >
-                          {currentTime >= 12 ? '✓ ยืนยันภาพถ่าย (ผ่าน)' : 'รอถ่ายภาพ'}
+                        <span className="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">
+                          ✓ ผ่านทั้งหมดในชุดนี้
                         </span>
                       </div>
 
-                      {/* Photo evidence preview or button */}
-                      {currentTime < 8 ? (
-                        <div className="bg-white border-2 border-dashed border-slate-300 p-3 rounded-lg flex items-center justify-between">
-                          <span className="text-[11px] text-slate-500">
-                            ต้องถ่ายภาพยืนยันสภาพเพื่อประมวลผล
+                      {/* Photo evidence preview with real watermark */}
+                      {currentTime < 6 ? (
+                        <div className="bg-white border-2 border-dashed border-slate-300 p-2.5 rounded-lg flex items-center justify-between">
+                          <span className="text-[10px] text-slate-500">
+                            📷 ต้องถ่ายภาพยืนยันประจำชุดที่ 1
                           </span>
-                          <span className="bg-[#005c55] text-white text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1 shadow-sm">
-                            <span className="material-symbols-outlined text-[14px]">camera</span>
-                            ถ่ายภาพ
+                          <span className="bg-[#005c55] text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-sm">
+                            <span className="material-symbols-outlined text-[13px]">camera</span>
+                            เปิดกล้องถ่าย
                           </span>
                         </div>
                       ) : (
-                        <div className="relative rounded-lg overflow-hidden border-2 border-[#005c55] h-28 bg-slate-900 flex items-center justify-center">
+                        <div className="relative rounded-lg overflow-hidden border-2 border-[#005c55] h-24 bg-slate-900 flex items-center justify-center">
                           <img
                             src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&auto=format&fit=crop&q=80"
                             alt="Bus inspection"
                             className="w-full h-full object-cover"
                             referrerPolicy="no-referrer"
                           />
-                          <div className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[8px] px-2 py-1 flex items-center justify-between">
-                            <span>ขสมก. เขต 6 | สาย 511 (3-50212)</span>
-                            <span className="text-emerald-400">✓ ลายน้ำประทับสมบูรณ์</span>
+                          {/* Automated Watermark overlay */}
+                          <div className="absolute bottom-0 inset-x-0 bg-black/85 text-white text-[8px] px-2 py-0.5 flex flex-col justify-center border-t border-emerald-400/40">
+                            <div className="flex items-center justify-between text-emerald-300 font-bold">
+                              <span>ขสมก. เขต 6 (กปด.36)</span>
+                              <span>สาย 4-59 (50010)</span>
+                            </div>
+                            <div className="text-slate-300 flex items-center justify-between text-[7.5px]">
+                              <span>ผู้ตรวจ: นายสมศักดิ์ (60124)</span>
+                              <span>22/09/2026 08:30 น.</span>
+                            </div>
                           </div>
                         </div>
                       )}
 
-                      <div className="flex gap-1.5 pt-1">
-                        <button
-                          className={`flex-1 py-1.5 rounded text-[10px] font-bold transition-all ${
-                            currentTime >= 12
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-white border border-slate-300 text-slate-600'
-                          }`}
-                        >
-                          ✓ สภาพผ่านเกณฑ์
-                        </button>
-                        <button className="px-3 py-1.5 bg-white border border-slate-300 rounded text-[10px] font-bold text-slate-600">
-                          ✕ ชำรุด
-                        </button>
+                      <div className="grid grid-cols-2 gap-1 text-[10px] pt-0.5">
+                        <div className="bg-white border border-slate-200 p-1 rounded flex items-center justify-between">
+                          <span className="truncate">1.1 ตัวถัง/กระจก</span>
+                          <span className="text-emerald-600 font-bold">✓ ผ่าน</span>
+                        </div>
+                        <div className="bg-white border border-slate-200 p-1 rounded flex items-center justify-between">
+                          <span className="truncate">1.2 ยาง/ไฟ</span>
+                          <span className="text-emerald-600 font-bold">✓ ผ่าน</span>
+                        </div>
                       </div>
                     </div>
 
                     {/* Submit Bar */}
                     <button
-                      className={`w-full mt-2.5 py-2 rounded-lg font-bold text-[11px] flex items-center justify-center gap-1 text-white transition-all ${
-                        currentTime >= 17
-                          ? 'bg-[#005c55] ring-2 ring-emerald-400 scale-[1.02]'
+                      className={`w-full mt-2 py-2 rounded-lg font-bold text-[11px] flex items-center justify-center gap-1 text-white transition-all ${
+                        currentTime >= 18
+                          ? 'bg-[#005c55] ring-2 ring-emerald-400 scale-[1.02] shadow-md'
                           : 'bg-slate-400'
                       }`}
                     >
@@ -423,9 +491,9 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
                         assignment_turned_in
                       </span>
                       <span>
-                        {currentTime >= 17
+                        {currentTime >= 18
                           ? 'สรุปผลและบันทึกข้อมูล (ไปขั้นตอนที่ 3) →'
-                          : 'ถ่ายภาพครบ 12 จุดแล้วพร้อมบันทึก'}
+                          : 'ตรวจครบทั้ง 3 ชุดแล้วพร้อมสรุปผล'}
                       </span>
                     </button>
                   </div>
@@ -433,48 +501,163 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
               )}
 
               {currentChapterIndex === 2 && (
-                /* Chapter 3: Step 3 Simulation */
-                <div className="relative w-full h-full p-4 flex flex-col items-center justify-center">
-                  <div className="w-[90%] max-w-md bg-white rounded-xl shadow-2xl p-4 text-slate-800 border border-slate-200 animate-fadeIn">
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 mb-3 flex items-center gap-2">
-                      <span className="material-symbols-outlined text-emerald-600 text-[22px]">
-                        check_circle
+                /* Chapter 3: Summary Modal Simulation */
+                <div className="relative w-full h-full p-3 sm:p-4 flex flex-col items-center justify-center">
+                  <div className="w-[90%] max-w-md bg-white rounded-xl shadow-2xl p-3.5 text-slate-800 border border-slate-200 animate-fadeIn">
+                    <div className="flex items-center justify-between border-b pb-1.5 mb-2">
+                      <span className="text-[11px] font-bold text-[#005c55] flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[16px]">fact_check</span>
+                        หน้าต่างสรุปผลและลงนามส่งรายงาน
                       </span>
-                      <div className="text-[11px]">
-                        <strong className="text-emerald-900 block">
-                          บันทึกข้อมูลเรียบร้อยครบทั้ง 3 ขั้นตอนแล้ว!
-                        </strong>
-                        <span className="text-emerald-700">
-                          ซิงค์ขึ้น Cloud Firestore เรียบร้อย
+                      <span className="text-[9px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded">
+                        สาย 4-59 (50010)
+                      </span>
+                    </div>
+
+                    {/* Status Banner */}
+                    <div className="bg-emerald-50 border border-emerald-300 rounded-lg p-2 mb-2 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="material-symbols-outlined text-emerald-600 text-[22px]">
+                          check_circle
+                        </span>
+                        <div className="text-[10px]">
+                          <strong className="text-emerald-900 block font-bold">
+                            ผ่านเกณฑ์มาตรฐานครบทั้ง 3 ชุด
+                          </strong>
+                          <span className="text-emerald-700">รถพร้อมบริการ 100% (กปด.36)</span>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 bg-emerald-600 text-white font-bold rounded-full text-[9px]">
+                        พร้อมบริการ
+                      </span>
+                    </div>
+
+                    {/* 3 Photos Thumbnails */}
+                    <div className="grid grid-cols-3 gap-1 text-center text-[9px] mb-2">
+                      <div className="bg-slate-100 p-1 rounded border border-slate-200">
+                        <div className="h-8 bg-slate-700 rounded text-white flex items-center justify-center text-[10px] mb-0.5">
+                          📷 ภายนอก
+                        </div>
+                        <span className="text-slate-600">ชุดที่ 1</span>
+                      </div>
+                      <div className="bg-slate-100 p-1 rounded border border-slate-200">
+                        <div className="h-8 bg-slate-700 rounded text-white flex items-center justify-center text-[10px] mb-0.5">
+                          📷 ภายใน
+                        </div>
+                        <span className="text-slate-600">ชุดที่ 2</span>
+                      </div>
+                      <div className="bg-slate-100 p-1 rounded border border-slate-200">
+                        <div className="h-8 bg-slate-700 rounded text-white flex items-center justify-center text-[10px] mb-0.5">
+                          📷 เครื่องยนต์
+                        </div>
+                        <span className="text-slate-600">ชุดที่ 3</span>
+                      </div>
+                    </div>
+
+                    {/* Signature Preview */}
+                    <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 mb-2 flex items-center justify-between text-[10px]">
+                      <div>
+                        <span className="text-slate-500 block text-[8.5px]">ลายมือชื่อผู้ตรวจ:</span>
+                        <span className="font-serif italic font-bold text-slate-800 text-[12px]">
+                          สมศักดิ์ ขสมก.
                         </span>
                       </div>
+                      <span className="text-emerald-600 font-bold">✓ เซ็นรับรองแล้ว</span>
                     </div>
 
-                    {/* Stats metrics */}
-                    <div className="grid grid-cols-3 gap-2 text-center mb-3">
-                      <div className="bg-slate-50 p-2 rounded border border-slate-200">
-                        <span className="text-[10px] text-slate-500 block">ตรวจวันนี้</span>
-                        <strong className="text-[16px] text-slate-800">12 คัน</strong>
-                      </div>
-                      <div className="bg-emerald-50 p-2 rounded border border-emerald-200">
-                        <span className="text-[10px] text-emerald-700 block">ผ่านเกณฑ์</span>
-                        <strong className="text-[16px] text-emerald-700">11 คัน</strong>
-                      </div>
-                      <div className="bg-rose-50 p-2 rounded border border-rose-200">
-                        <span className="text-[10px] text-rose-700 block">พบปัญหา</span>
-                        <strong className="text-[16px] text-rose-700">1 คัน</strong>
-                      </div>
-                    </div>
-
-                    {/* Restart Button highlight */}
+                    {/* Confirm Cloud Submit Button */}
                     <button
-                      className={`w-full py-3 rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 text-white shadow-lg transition-all ${
-                        currentTime >= 8
-                          ? 'bg-[#005c55] ring-4 ring-emerald-300 scale-[1.03] animate-pulse'
+                      className={`w-full py-2.5 rounded-xl font-bold text-[12px] flex items-center justify-center gap-1.5 text-white shadow-md transition-all ${
+                        currentTime >= 13
+                          ? 'bg-[#005c55] ring-2 ring-emerald-400 scale-[1.02] shadow-emerald-500/30'
                           : 'bg-[#005c55]'
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[18px]">replay</span>
+                      <span className="material-symbols-outlined text-[16px]">cloud_upload</span>
+                      <span>
+                        {currentTime >= 13
+                          ? '✓ บันทึกสำเร็จ! ซิงค์ Cloud Firestore'
+                          : 'ยืนยันและบันทึกข้อมูล (ส่งรายงาน)'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {currentChapterIndex === 3 && (
+                /* Chapter 4: Step 3 Dashboard Simulation */
+                <div className="relative w-full h-full p-3 sm:p-4 flex flex-col items-center justify-center">
+                  <div className="w-[92%] max-w-md bg-white rounded-xl shadow-2xl p-3 text-slate-800 border border-slate-200 animate-fadeIn">
+                    <div className="flex items-center justify-between border-b pb-1.5 mb-2">
+                      <span className="text-[11px] font-bold text-[#005c55] flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[16px]">dashboard</span>
+                        STEP 3 • แดชบอร์ดสรุปผล ขสมก. เขต 6
+                      </span>
+                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Cloud Real-time
+                      </span>
+                    </div>
+
+                    {/* 4 Stats metrics */}
+                    <div className="grid grid-cols-4 gap-1.5 text-center mb-2 text-[10px]">
+                      <div className="bg-slate-50 p-1.5 rounded-lg border border-slate-200">
+                        <span className="text-[8.5px] text-slate-500 block">ตรวจวันนี้</span>
+                        <strong className="text-[14px] text-slate-800">48</strong>
+                      </div>
+                      <div className="bg-emerald-50 p-1.5 rounded-lg border border-emerald-200">
+                        <span className="text-[8.5px] text-emerald-700 block">พร้อมบริการ</span>
+                        <strong className="text-[14px] text-emerald-700">46</strong>
+                      </div>
+                      <div className="bg-rose-50 p-1.5 rounded-lg border border-rose-200">
+                        <span className="text-[8.5px] text-rose-700 block">ต้องซ่อม</span>
+                        <strong className="text-[14px] text-rose-700">2</strong>
+                      </div>
+                      <div className="bg-blue-50 p-1.5 rounded-lg border border-blue-200">
+                        <span className="text-[8.5px] text-blue-700 block">ความพร้อม</span>
+                        <strong className="text-[14px] text-blue-700">95.8%</strong>
+                      </div>
+                    </div>
+
+                    {/* Action Toolbar */}
+                    <div className="grid grid-cols-3 gap-1 mb-2 text-[9.5px]">
+                      <button className="p-1 rounded-lg font-bold flex items-center justify-center gap-0.5 bg-rose-600 text-white shadow-xs">
+                        <span className="material-symbols-outlined text-[12px]">picture_as_pdf</span>
+                        <span>📄 รายงาน PDF</span>
+                      </button>
+                      <button
+                        className={`p-1 rounded-lg font-bold flex items-center justify-center gap-0.5 transition-all ${
+                          currentTime >= 8 && currentTime <= 14
+                            ? 'bg-emerald-700 text-white ring-2 ring-emerald-400'
+                            : 'bg-emerald-50 text-emerald-900 border border-emerald-200'
+                        }`}
+                      >
+                        <span className="material-symbols-outlined text-[12px]">chat</span>
+                        <span>📋 ส่ง LINE</span>
+                      </button>
+                      <button className="p-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-bold flex items-center justify-center gap-0.5">
+                        <span className="material-symbols-outlined text-[12px]">download</span>
+                        <span>📥 CSV</span>
+                      </button>
+                    </div>
+
+                    {/* Toast notification during LINE copy simulation */}
+                    {currentTime >= 8 && currentTime <= 14 && (
+                      <div className="bg-slate-900 text-emerald-300 text-[10px] px-2.5 py-1 rounded-md text-center mb-2 animate-bounce flex items-center justify-center gap-1 shadow-md">
+                        <span className="material-symbols-outlined text-[14px] text-emerald-400">check</span>
+                        <span>คัดลอกข้อความสรุปยอดประจำวันส่งกลุ่ม LINE สำเร็จแล้ว!</span>
+                      </div>
+                    )}
+
+                    {/* Restart Button highlight */}
+                    <button
+                      className={`w-full py-2.5 rounded-xl font-bold text-[12px] flex items-center justify-center gap-1.5 text-white shadow-lg transition-all ${
+                        currentTime >= 15
+                          ? 'bg-[#005c55] ring-4 ring-emerald-300 scale-[1.02] animate-pulse'
+                          : 'bg-[#005c55]'
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-[16px]">replay</span>
                       <span>🔄 เริ่มต้นใหม่ (ตรวจคันถัดไป)</span>
                     </button>
                   </div>
@@ -678,7 +861,7 @@ export const VideoTutorialModal: React.FC<VideoTutorialModalProps> = ({
                   onClose();
                   if (onJumpToStep) {
                     if (currentChapterIndex === 0) onJumpToStep('info');
-                    else if (currentChapterIndex === 1) onJumpToStep('inspect');
+                    else if (currentChapterIndex === 1 || currentChapterIndex === 2) onJumpToStep('inspect');
                     else onJumpToStep('dashboard');
                   }
                 }}
